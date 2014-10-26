@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +33,9 @@ public class UpdateSubscriber extends JPanel {
 				subscriberT.setSelectedItem("1");
 			}
 		});
+		
+		JButton update = new JButton("Update");
+		
 		JLabel id = new JLabel("Phone Number");
 
 		idT.setEnabled(false);
@@ -43,6 +47,10 @@ public class UpdateSubscriber extends JPanel {
 		fioT.setVisible(false);
 		JLabel subscriber = new JLabel("Subscriber");
 
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.setVisible(false);
+		
 		add(phoneChoose);
 		add(phoneNumber);
 		this.add(id);
@@ -53,8 +61,10 @@ public class UpdateSubscriber extends JPanel {
 		this.add(fioT);
 		this.add(subscriber);
 		this.add(subscriberT);
+		this.add(cancel);
+		this.add(update);
 		updateUI();
-		setLayout(new GridLayout(4, 2));
+		setLayout(new GridLayout(6, 2));
 	}
 
 }

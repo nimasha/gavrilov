@@ -29,8 +29,15 @@ public class Desktop extends JFrame {
 	private static ModelController modelController = ModelController
 			.getInstance();
 
+	public static Desktop getInstance() {
+		
+		return desktopInstance;
+
+	}
+
 	public Desktop() {
 		super();
+		
 		JMenuBar fileMenuBar = new JMenuBar();
 		JMenu modelMenu = new JMenu("Model");
 		JMenu phoneMenu = new JMenu("Phone");
@@ -155,8 +162,7 @@ public class Desktop extends JFrame {
 				if (ret == JFileChooser.APPROVE_OPTION) {
 
 					try {
-						modelController.setModel(
-								chooseFile.getSelectedFile());
+						modelController.setModel(chooseFile.getSelectedFile());
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

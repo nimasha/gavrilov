@@ -49,7 +49,7 @@ public class CreateSubscriber extends JPanel {
 		});
 		add(create);
 		updateUI();
-		setLayout(new GridLayout(5, 2));
+		setLayout(new GridLayout(7, 2));
 
 	}
 }

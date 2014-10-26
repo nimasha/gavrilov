@@ -4,10 +4,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controller.PhoneController;
 
 public class UpdatePhone extends JPanel {
 
@@ -20,10 +23,11 @@ public class UpdatePhone extends JPanel {
 	JTextField balanceT = new JTextField();
 	String[] demo = { " ", "1", "2", "3" };
 	JComboBox<String> subscriberT = new JComboBox<>(demo);
+	private static Desktop desktopController = Desktop.getInstance();
 
 	public UpdatePhone() {
 
-		JLabel phoneChoose = new JLabel("Choose Phone Number To Delete");
+		JLabel phoneChoose = new JLabel("Choose Phone Number To Update");
 		JComboBox<String> phoneNumber = new JComboBox<>(demo);
 		phoneNumber.addActionListener(new ActionListener() {
 
@@ -37,14 +41,19 @@ public class UpdatePhone extends JPanel {
 			}
 		});
 		JLabel id = new JLabel("Phone Number");
-
-		id.setEnabled(false);
+		JButton update = new JButton("Update");
+		
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.setVisible(false);
+		
+		id.setEnabled(true);
 		JLabel hours = new JLabel("Hours");
 
-		hoursT.setVisible(false);
+		hoursT.setVisible(true);
 		JLabel balance = new JLabel("Balance");
 
-		balanceT.setVisible(false);
+		balanceT.setVisible(true);
 		JLabel subscriber = new JLabel("Subscriber");
 
 		add(phoneChoose);
@@ -57,7 +66,10 @@ public class UpdatePhone extends JPanel {
 		this.add(balanceT);
 		this.add(subscriber);
 		this.add(subscriberT);
+		this.add(cancel);
+		this.add(update);
+		
 		updateUI();
-		setLayout(new GridLayout(4, 2));
+		setLayout(new GridLayout(6, 2));
 	}
 }
