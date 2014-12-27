@@ -1,25 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 
  * @author sasha
  */
 
-public class Subscriber  {
-	private static final long serialVersionUID = 1L;
-
-	private BigDecimal id;
+public class Subscriber implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6180258311032093626L;
+	private Long id;
 	private String passport;
 	private String fio;
 	private String address;
@@ -27,26 +22,29 @@ public class Subscriber  {
 	private List<Phone> phoneList;
 
 	public Subscriber() {
+		phoneList = new ArrayList<>();
 	}
 
-	public Subscriber(BigDecimal id) {
+	public Subscriber(Long id) {
 		this.id = id;
+		phoneList = new ArrayList<>();
 	}
 
-	public Subscriber(BigDecimal id, String passport, String fio,
-			String address, String birthday) {
+	public Subscriber(Long id, String passport, String fio, String address,
+			String birthday) {
 		this.id = id;
 		this.passport = passport;
 		this.fio = fio;
 		this.address = address;
 		this.birthday = birthday;
+		phoneList = new ArrayList<>();
 	}
 
-	public BigDecimal getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(BigDecimal id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -86,8 +84,30 @@ public class Subscriber  {
 		return phoneList;
 	}
 
+	public String getPhoneListAsString() {
+		String result = "";
+		for (Phone p : phoneList) {
+			result += p.toString() + ",";
+		}
+		if (!result.isEmpty())
+			return result.substring(0, result.length() - 1);
+		else
+			return "";
+	}
+
 	public void setPhoneList(List<Phone> phoneList) {
 		this.phoneList = phoneList;
+	}
+
+	public void removePhoneById(Long phoneId) {
+		if (phoneList != null) {
+			for (Phone p : phoneList) {
+				if (p.getId() == phoneId) {
+					phoneList.remove(p);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -114,7 +134,7 @@ public class Subscriber  {
 
 	@Override
 	public String toString() {
-		return "model.Subscriber[ id=" + id + " ]";
+		return fio;
 	}
 
 }

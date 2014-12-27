@@ -6,38 +6,42 @@
 package model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * 
  * @author sasha
  */
 
-public class Phone {
-	private static final long serialVersionUID = 1L;
-	private BigDecimal id;
+public class Phone implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2955147717500663667L;
+	private Long id;
 	private double hours;
 	private double balance;
-	private Subscriber idSubscriber;
+	private Subscriber subscriber;
 
 	public Phone() {
 	}
 
-	public Phone(BigDecimal id) {
+	public Phone(Long id) {
 		this.id = id;
 	}
 
-	public Phone(BigDecimal id, double hours, double balance) {
+	public Phone(Long id, double balance, Subscriber s) {
 		this.id = id;
-		this.hours = hours;
+		this.hours = 0;
 		this.balance = balance;
+		subscriber = s;
+
 	}
 
-	public BigDecimal getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(BigDecimal id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -57,12 +61,12 @@ public class Phone {
 		this.balance = balance;
 	}
 
-	public Subscriber getIdSubscriber() {
-		return idSubscriber;
+	public Subscriber getSubscriber() {
+		return subscriber;
 	}
 
-	public void setIdSubscriber(Subscriber idSubscriber) {
-		this.idSubscriber = idSubscriber;
+	public void setSubscriber(Subscriber subscriber) {
+		this.subscriber = subscriber;
 	}
 
 	@Override
@@ -89,7 +93,7 @@ public class Phone {
 
 	@Override
 	public String toString() {
-		return "model.Phone[ id=" + id + " ]";
+		return id.toString();
 	}
 
 }

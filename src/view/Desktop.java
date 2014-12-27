@@ -1,48 +1,61 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import controller.ModelController;
-import controller.PhoneController;
+import model.Phone;
+import model.Subscriber;
+import controller.Controller;
+import controller.NotificationListener;
 
-public class Desktop extends JFrame {
+public class Desktop extends JFrame implements NotificationListener {
 
 	private static final long serialVersionUID = 1L;
 	private static Desktop desktopInstance;
-	private static PhoneController phoneController = PhoneController
-			.getInstance();
-	private static ModelController modelController = ModelController
-			.getInstance();
+	private static Controller controller;
+	private JPanel currentModelView = null;
+	private Object lockedObject;
+	
+	public static synchronized Desktop getInstance() {
 
-	public static Desktop getInstance() {
-		
 		return desktopInstance;
 
 	}
 
-	public Desktop() {
-		super();
+	public void lockObject(Object object) {
+		lockedObject = object;
+	}
+
+	private void unlockSomething() {
+		if (lockedObject != null) {
+			if (lockedObject instanceof Phone) {
+				controller.unlockPhone(((Phone) lockedObject).getId());
+			} else if (lockedObject instanceof Subscriber) {
+				controller
+						.unlockSubscriber(((Subscriber) lockedObject).getId());
+			}
+		lockedObject=null;
+		}
+	}
+
+	public Desktop(Controller ControllerExt) {
 		
+		super();
+		controller = ControllerExt;
 		JMenuBar fileMenuBar = new JMenuBar();
 		JMenu modelMenu = new JMenu("Model");
 		JMenu phoneMenu = new JMenu("Phone");
 		JMenu subscriberMenu = new JMenu("Subscriber");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		JMenuItem createPhone = new JMenuItem(new AbstractAction("Create") {
 
 			private static final long serialVersionUID = 1L;
@@ -50,7 +63,10 @@ public class Desktop extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				desktopInstance.getContentPane().removeAll();
-				desktopInstance.add(new CreatePhone());
+				unlockSomething();
+				currentModelView = new CreatePhone(controller);
+				desktopInstance.add(currentModelView);
+
 				paintComponents(getGraphics());
 			}
 		});
@@ -63,8 +79,10 @@ public class Desktop extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				unlockSomething();
 				desktopInstance.getContentPane().removeAll();
-				desktopInstance.add(new UpdatePhone());
+				currentModelView = new UpdatePhone(controller);
+				desktopInstance.add(currentModelView);
 				paintComponents(getGraphics());
 
 			}
@@ -79,8 +97,10 @@ public class Desktop extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				unlockSomething();
 				desktopInstance.getContentPane().removeAll();
-				desktopInstance.add(new DeletePhone());
+				currentModelView = new DeletePhone(controller);
+				desktopInstance.add(currentModelView);
 				paintComponents(getGraphics());
 			}
 		});
@@ -95,8 +115,10 @@ public class Desktop extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						unlockSomething();
 						desktopInstance.getContentPane().removeAll();
-						desktopInstance.add(new CreateSubscriber());
+						currentModelView = new CreateSubscriber(controller);
+						desktopInstance.add(currentModelView);
 						paintComponents(getGraphics());
 
 					}
@@ -111,8 +133,10 @@ public class Desktop extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						unlockSomething();
 						desktopInstance.getContentPane().removeAll();
-						desktopInstance.add(new UpdateSubscriber());
+						currentModelView = new UpdateSubscriber(controller);
+						desktopInstance.add(currentModelView);
 						paintComponents(getGraphics());
 					}
 				});
@@ -126,8 +150,10 @@ public class Desktop extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						unlockSomething();
 						desktopInstance.getContentPane().removeAll();
-						desktopInstance.add(new DeleteSubscriber());
+						currentModelView = new DeleteSubscriber(controller);
+						desktopInstance.add(currentModelView);
 						paintComponents(getGraphics());
 					}
 				});
@@ -137,15 +163,18 @@ public class Desktop extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ModelController.getInstance().saveModel();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				JFileChooser chooseFile = new JFileChooser("");
+				int ret = chooseFile.showDialog(null, "Choose File");
+				if (ret == JFileChooser.APPROVE_OPTION) {
+
+					/*
+					 * try {
+					 * //controller.saveModel(chooseFile.getSelectedFile()); }
+					 * catch (FileNotFoundException e1) { e1.printStackTrace();
+					 * } catch (IOException e1) { e1.printStackTrace(); }
+					 */
 				}
+
 			}
 		});
 		JMenuItem uploadModel = new JMenuItem(new AbstractAction("Upload") {
@@ -161,36 +190,76 @@ public class Desktop extends JFrame {
 				int ret = chooseFile.showDialog(null, "Choose File");
 				if (ret == JFileChooser.APPROVE_OPTION) {
 
-					try {
-						modelController.setModel(chooseFile.getSelectedFile());
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					/*
+					 * try { Controller.setModel(chooseFile.getSelectedFile());
+					 * } catch (FileNotFoundException e1) { // TODO
+					 * Auto-generated catch block e1.printStackTrace(); } catch
+					 * (IOException e1) { // TODO Auto-generated catch block
+					 * e1.printStackTrace(); } catch (ClassNotFoundException e1)
+					 * { // TODO Auto-generated catch block
+					 * e1.printStackTrace(); }
+					 */
 				}
 
 			}
 		});
 
-		modelMenu.add(saveModel);
-		modelMenu.add(uploadModel);
+		// modelMenu.add(saveModel);
+		// modelMenu.add(uploadModel);
 		phoneMenu.add(createPhone);
 		phoneMenu.add(updatePhone);
 		phoneMenu.add(deletePhone);
 		subscriberMenu.add(createSubscriber);
 		subscriberMenu.add(updateSubscriber);
 		subscriberMenu.add(deleteSubscriber);
-		fileMenuBar.add(modelMenu);
+		// fileMenuBar.add(modelMenu);
 		fileMenuBar.add(phoneMenu);
 		fileMenuBar.add(subscriberMenu);
 		this.setJMenuBar(fileMenuBar);
 		desktopInstance = this;
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        unlockSomething();
+		    }
+		});
+	}
 
+	@Override
+	public void subscriberChanged(Subscriber subscriber) {
+		if (currentModelView != null
+				&& currentModelView instanceof DeleteSubscriber) {
+
+		}
+
+	}
+
+	@Override
+	public void subscriberAdded(Subscriber subscriber) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void subscriberRemoved(Long id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void phoneChanged(Phone phone) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void phoneAdded(Phone phone) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void phoneRemoved(Long id) {
+		JOptionPane.showInternalMessageDialog(null,"Phone "+ controller.getPhone(id).toString() +" was deleted" );
 	}
 }

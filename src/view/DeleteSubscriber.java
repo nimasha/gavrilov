@@ -7,35 +7,77 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import model.Phone;
+import model.Subscriber;
+import controller.Controller;
 
 public class DeleteSubscriber extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel info = new JLabel();
-
-	public DeleteSubscriber() {
-
-		String[] demo = { " ", "1", "2", "3" };
+	private static Controller modelController;
+	JComboBox<Object> subscriberID;
+	Object removeObject = null;
+	Subscriber lockedSubscriber;
+	public DeleteSubscriber(Controller modelControllerExt) {
+		modelController = modelControllerExt;
 		JLabel subscriberChoose = new JLabel("Choose Subscriber To Delete");
-		JComboBox<String> phoneNumber = new JComboBox<>(demo);
+		subscriberID = new JComboBox<>(modelController.getSubscribers()
+				.toArray());
+		subscriberID.setSelectedIndex(-1);
+		subscriberID.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!modelController
+						.tryLockSubscriber(((Subscriber) subscriberID
+								.getSelectedItem()).getId())&& lockedSubscriber != (Subscriber) subscriberID.getSelectedItem()) {
+					JOptionPane.showMessageDialog(null,
+							"Subscriber is currently locked by another user");
+					subscriberID.setSelectedIndex(-1);
+				}
+				else{
+					lockUnlockSubscriber();
+				}
+			}
+		});
 		JButton delete = new JButton("Delete");
-		phoneNumber.addActionListener(new ActionListener() {
+		delete.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO set info about chosen subscriber
-				info.setText("ahfvbadljfafdv");
+				removeObject = subscriberID.getSelectedItem();
+				if (removeObject != null) {
+					modelController
+							.deleteSubscriber(((Subscriber) removeObject)
+									.getId());
+					info.setText("Subscriber "
+							+ ((Subscriber) removeObject).toString()
+							+ " was deleted");
+					subscriberID.removeItem(removeObject);
+					subscriberID.updateUI();
+				}
 			}
 		});
 		add(subscriberChoose);
-		add(phoneNumber);
+		add(subscriberID);
 		add(info);
 		add(delete);
 
 		setLayout(new GridLayout(2, 2));
 
 	}
-
+	private void lockUnlockSubscriber() {
+		if (lockedSubscriber!= (Subscriber) subscriberID.getSelectedItem()) {
+			if (lockedSubscriber != null){
+				modelController.unlockSubscriber(lockedSubscriber.getId());}
+			
+				lockedSubscriber = (Subscriber) subscriberID.getSelectedItem();
+				Desktop.getInstance().lockObject(lockedSubscriber);
+			
+		}
+	}
 }
