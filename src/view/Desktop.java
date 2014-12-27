@@ -254,12 +254,12 @@ public class Desktop extends JFrame implements NotificationListener {
 
 	@Override
 	public void phoneAdded(Phone phone) {
-		// TODO Auto-generated method stub
+	 JOptionPane.showInternalMessageDialog(this,"Phone "+ phone.toString() +" was added" );
 
 	}
 
 	@Override
 	public void phoneRemoved(Long id) {
-		JOptionPane.showInternalMessageDialog(null,"Phone "+ controller.getPhone(id).toString() +" was deleted" );
+		JOptionPane.showInternalMessageDialog(this,"Phone "+ controller.getPhone(id).toString() +" was deleted" );
 	}
 }

@@ -79,12 +79,14 @@ public class ServerControllerImpl implements ServerController {
 		if (subscriber == null)
 			return;
 		model.addSubscriber(subscriber);
+		notificationController.subscriberAdded(subscriber);
 	}
 
 	public void replaceSubscriber(Subscriber newSubscriber) {
 		if (newSubscriber == null)
 			return;
 		model.addSubscriber(newSubscriber);
+		notificationController.subscriberChanged(newSubscriber);
 	}
 
 	public void deleteSubscriber(Long subscriberId) {
@@ -94,13 +96,14 @@ public class ServerControllerImpl implements ServerController {
 			model.removePhone(phone.getId());
 		}
 		model.removeSubscriber(subscriberId);
+		notificationController.subscriberRemoved(subscriberId);
 	}
 
 	public void addPhone(Phone phone) {
 		if (phone.getSubscriber() != null)
 			phone.getSubscriber().getPhoneList().add(phone);
 		model.addPhone(phone);
-
+notificationController.phoneAdded(phone);
 	}
 
 	public void replacePhone(Phone phone, Subscriber oldSubscriber) {
@@ -110,6 +113,7 @@ public class ServerControllerImpl implements ServerController {
 			model.getPhonesBySubscriber(phone.getSubscriber().getId()).add(
 					phone);
 		model.addPhone(phone);
+		notificationController.phoneChanged(phone);
 	}
 
 	public Phone getPhone(Long id) {
@@ -123,6 +127,7 @@ public class ServerControllerImpl implements ServerController {
 			subsc.removePhoneById(phoneId);
 		}
 		model.removePhone(phoneId);
+		notificationController.phoneRemoved(phoneId);
 	}
 
 	public List<Phone> getPhonesBySubscriber(Long subscriberId) {
@@ -142,7 +147,6 @@ public class ServerControllerImpl implements ServerController {
 	@Override
 	public void addListener(Socket socket) {
 		notificationController.addListener(socket);
-
 	}
 
 	 public boolean tryLockSubscriber(Long id) {
