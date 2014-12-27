@@ -50,11 +50,10 @@ public class ClientController implements Controller {
 	public void addPhone(Phone location) /* throws CreationException */{
 		OperationResponse response = sendMessage(new OperationRequest(
 				"addPhone", location));
-		/*
-		 * if (response.getException() != null && response.getException()
-		 * instanceof CreationException) throw (CreationException)
-		 * response.getException();
-		 */
+
+		/*if (response.getException() != null	&& response.getException() instanceof CreationException)
+			throw (CreationException) response.getException();*/
+
 	}
 
 	public void replacePhone(Phone location) {
