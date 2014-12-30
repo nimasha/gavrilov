@@ -122,7 +122,7 @@ public class ServerControllerImpl implements ServerController {
 	}
 
 	public void deletePhone(Long phoneId) {
-		unlockPhone(phoneId);
+		//unlockPhone(phoneId);
 		Subscriber subsc = model.getPhone(phoneId).getSubscriber();
 		if (subsc != null) {
 			subsc.removePhoneById(phoneId);

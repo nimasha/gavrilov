@@ -50,7 +50,7 @@ public class DeletePhone extends JPanel implements PhonePanel {
 			public void actionPerformed(ActionEvent arg0) {
 				//
 				removeObject = phoneNumber.getSelectedItem();
-				if (removeObject != null && removeObject == lockedPhone) {
+				if (removeObject != null /*&& removeObject == lockedPhone*/) {
 					// modelController.unlockPhone(((Phone)
 					// removeObject).getId());
 					modelController.deletePhone(((Phone) removeObject).getId());

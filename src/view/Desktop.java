@@ -229,11 +229,35 @@ public class Desktop extends JFrame implements NotificationListener {
 	}
 
 	@Override
-	public void subscriberChanged(Subscriber subscriber) {
-		if (currentModelView != null
-				&& currentModelView instanceof DeleteSubscriber) {
+	public void subscriberChanged(final Subscriber subscriber) {
+		if (currentModelView != null) {
+			if (currentModelView instanceof UpdateSubscriber
+					&& ((Subscriber) ((UpdateSubscriber) currentModelView)
+							.getSubscriberComboBox().getSelectedItem())
+							.getId() == subscriber.getId()) {
+				SwingUtilities.invokeLater(new Runnable() {
 
+					@Override
+					public void run() {
+						((UpdateSubscriber) currentModelView)
+								.getSubscriberComboBox().removeItem(
+										((UpdateSubscriber) currentModelView)
+												.getSubscriberComboBox()
+												.getSelectedItem());
+						((UpdateSubscriber) currentModelView)
+								.getSubscriberComboBox().addItem(subscriber);
+						((UpdateSubscriber) currentModelView)
+								.getSubscriberComboBox()
+								.setSelectedItem(subscriber);
+						JOptionPane.showMessageDialog(currentModelView,
+								"Subscriber " + subscriber + " was updated");
+						((UpdatePhone) currentModelView).updateFields();
+					}
+				});
+
+			}
 		}
+		System.out.println("Subscriber " + subscriber.toString() + " was changed");
 
 	}
 
