@@ -53,8 +53,8 @@ public class ServerSideNotificationController implements NotificationController 
 			try {
 				ObjectOutputStream out = new ObjectOutputStream(
 						soc.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(
-						soc.getInputStream());
+				//ObjectInputStream in = new ObjectInputStream(
+					//	soc.getInputStream());
 				out.writeObject(request);
 				out.flush();
 				out.reset();
