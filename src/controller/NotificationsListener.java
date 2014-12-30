@@ -23,15 +23,16 @@ public class NotificationsListener implements Runnable{
 
     public void run() {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(socketToListen.getOutputStream());
+            //ObjectOutputStream out = new ObjectOutputStream(socketToListen.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socketToListen.getInputStream());
             while (true)
             {
                 OperationRequest request = (OperationRequest) in.readObject();
-                OperationResponse response = requestExecutor.executeRequest(request);
-                out.writeObject(response);
-                out.flush();
-                out.reset();
+                //OperationResponse response =
+                		requestExecutor.executeRequest(request);
+                //out.writeObject(response);
+                //out.flush();
+                //out.reset();
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
