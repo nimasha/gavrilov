@@ -11,6 +11,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import view.interfaces.PhonePanel;
+import view.interfaces.SubscriberPanel;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
@@ -23,7 +25,7 @@ public class Desktop extends JFrame implements NotificationListener {
 	private static Controller controller;
 	private JPanel currentModelView = null;
 	private Object lockedObject;
-	
+
 	public static synchronized Desktop getInstance() {
 
 		return desktopInstance;
@@ -42,12 +44,12 @@ public class Desktop extends JFrame implements NotificationListener {
 				controller
 						.unlockSubscriber(((Subscriber) lockedObject).getId());
 			}
-		lockedObject=null;
+			lockedObject = null;
 		}
 	}
 
 	public Desktop(Controller ControllerExt) {
-		
+
 		super();
 		controller = ControllerExt;
 		JMenuBar fileMenuBar = new JMenuBar();
@@ -218,10 +220,10 @@ public class Desktop extends JFrame implements NotificationListener {
 		this.setJMenuBar(fileMenuBar);
 		desktopInstance = this;
 		addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        unlockSomething();
-		    }
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				unlockSomething();
+			}
 		});
 	}
 
@@ -236,30 +238,85 @@ public class Desktop extends JFrame implements NotificationListener {
 
 	@Override
 	public void subscriberAdded(Subscriber subscriber) {
-		// TODO Auto-generated method stub
+		if (currentModelView != null) {
+			if (currentModelView instanceof UpdateSubscriber
+					|| currentModelView instanceof DeleteSubscriber
+					|| currentModelView instanceof CreatePhone
+					|| currentModelView instanceof UpdatePhone) {
+				((SubscriberPanel) currentModelView).getSubscriberComboBox()
+						.addItem(subscriber);
+			}
+		}
+
+		System.out.println("Subscriber " + subscriber.toString() + " was added");
 
 	}
 
 	@Override
 	public void subscriberRemoved(Long id) {
-		// TODO Auto-generated method stub
+		if (currentModelView != null) {
+			if (currentModelView instanceof UpdateSubscriber
+					|| currentModelView instanceof DeleteSubscriber
+					|| currentModelView instanceof CreatePhone
+					|| currentModelView instanceof UpdatePhone) {
+				//((SubscriberPanel) currentModelView).getSubscriberComboBox()
+					//	.addItem(subscriber);
+			}
+		}
 
+		//System.out.println("Subscriber " + subscriber.toString() + " was removed");
 	}
 
 	@Override
 	public void phoneChanged(Phone phone) {
-		// TODO Auto-generated method stub
+		if (currentModelView != null) {
+			if (currentModelView instanceof UpdatePhone
+					&& ((Phone) ((UpdatePhone) currentModelView)
+							.getPhoneNumberComboBox().getSelectedItem())
+							.getId() == phone.getId()) {
+				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
+						.removeItem(
+								((UpdatePhone) currentModelView)
+										.getPhoneNumberComboBox()
+										.getSelectedItem());
+				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
+						.addItem(phone);
+				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
+						.setSelectedItem(phone);
+				JOptionPane.showMessageDialog(currentModelView, "Phone "
+						+ phone + " was updated");
+				((UpdatePhone) currentModelView).updateFields();
+
+			}
+		}
+		System.out.println("Phone " + phone.toString() + " was changed");
 
 	}
 
 	@Override
 	public void phoneAdded(Phone phone) {
-	 //JOptionPane.showInternalMessageDialog(this,"Phone "+ phone.toString() +" was added" );
-System.out.println("Phone "+ phone.toString() +" was added" );
+		if (currentModelView != null) {
+			if (currentModelView instanceof DeletePhone
+					|| currentModelView instanceof UpdatePhone) {
+				((PhonePanel) currentModelView).getPhoneNumberComboBox()
+						.addItem(phone);
+			}
+		}
+
+		System.out.println("Phone " + phone.toString() + " was added");
 	}
 
 	@Override
-	public void phoneRemoved(Long id) {
-		//JOptionPane.showInternalMessageDialog(this,"Phone "+ controller.getPhone(id).toString() +" was deleted" );
+	public void phoneRemoved(Phone phone) {
+		if (currentModelView != null) {
+			if (currentModelView instanceof DeletePhone
+					|| currentModelView instanceof UpdatePhone) {
+
+				((PhonePanel) currentModelView).getPhoneNumberComboBox()
+						.removeItem(phone);
+			}
+		}
+
+		System.out.println("Phone " + phone.toString() + " was removed");
 	}
 }

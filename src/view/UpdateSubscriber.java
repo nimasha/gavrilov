@@ -14,11 +14,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import view.interfaces.SubscriberPanel;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
 
-public class UpdateSubscriber extends JPanel {
+public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 
 	private static final long serialVersionUID = 1L;
 	JTextField passportT = new JTextField();
@@ -149,5 +150,10 @@ public class UpdateSubscriber extends JPanel {
 		phoneNumber.setEditable(flag);
 		fioT.setEditable(flag);
 		passportT.setEditable(flag);
+	}
+
+	@Override
+	public JComboBox<Object> getSubscriberComboBox() {
+		return subscriberT;
 	}
 }

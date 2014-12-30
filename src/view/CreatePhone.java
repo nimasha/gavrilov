@@ -11,11 +11,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import view.interfaces.SubscriberPanel;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
 
-public class CreatePhone extends JPanel {
+public class CreatePhone extends JPanel implements SubscriberPanel {
 	private static Controller modelController;
 	private static final long serialVersionUID = 1L;
 	JTextField idT = new JTextField();
@@ -106,5 +107,10 @@ public class CreatePhone extends JPanel {
 				Desktop.getInstance().lockObject(lockedSubscriber);
 			
 		}
+	}
+
+	@Override
+	public JComboBox<Object> getSubscriberComboBox() {
+		return subscriberT;
 	}
 }

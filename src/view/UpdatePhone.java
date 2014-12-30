@@ -12,11 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import view.interfaces.PhonePanel;
+import view.interfaces.SubscriberPanel;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
 
-public class UpdatePhone extends JPanel {
+public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 
 	/**
 	 * 
@@ -26,7 +28,7 @@ public class UpdatePhone extends JPanel {
 	// JTextField idT = new JTextField();
 	JTextField hoursT = new JTextField();
 	JTextField balanceT = new JTextField();
-	JComboBox<Object> phoneNumber;
+	private static JComboBox<Object> phoneNumber;
 	JComboBox<Object> subscriberT;
 	Phone chosenPhone;
 	JLabel info = new JLabel("");
@@ -42,10 +44,10 @@ public class UpdatePhone extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (subscriberT
-						.getSelectedItem()!=null &&!modelController
-						.tryLockSubscriber(((Subscriber) subscriberT
-								.getSelectedItem()).getId())
+				if (subscriberT.getSelectedItem() != null
+						&& !modelController
+								.tryLockSubscriber(((Subscriber) subscriberT
+										.getSelectedItem()).getId())
 						&& lockedSubscriber != (Subscriber) subscriberT
 								.getSelectedItem()) {
 					JOptionPane.showMessageDialog(null,
@@ -148,7 +150,9 @@ public class UpdatePhone extends JPanel {
 	public void updateUIOfSubscriber() {
 		paintComponents(getGraphics());
 	}
-
+	public JComboBox<Object> getPhoneNumberComboBox() {
+		return phoneNumber;
+	}
 	public void updateFields() {
 		if ((Phone) phoneNumber.getSelectedItem() != null
 				&& phoneNumber.getItemCount() > 0) {
@@ -185,5 +189,10 @@ public class UpdatePhone extends JPanel {
 			Desktop.getInstance().lockObject(lockedSubscriber);
 
 		}
+	}
+
+	@Override
+	public JComboBox<Object> getSubscriberComboBox() {
+		return subscriberT;
 	}
 }

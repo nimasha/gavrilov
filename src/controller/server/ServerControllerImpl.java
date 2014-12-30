@@ -103,7 +103,7 @@ public class ServerControllerImpl implements ServerController {
 		if (phone.getSubscriber() != null)
 			phone.getSubscriber().getPhoneList().add(phone);
 		model.addPhone(phone);
-notificationController.phoneAdded(phone);
+		notificationController.phoneAdded(phone);
 	}
 
 	public void replacePhone(Phone phone, Subscriber oldSubscriber) {
@@ -121,13 +121,14 @@ notificationController.phoneAdded(phone);
 	}
 
 	public void deletePhone(Long phoneId) {
-		// it should be removed from subscriber
+		unlockPhone(phoneId);
 		Subscriber subsc = model.getPhone(phoneId).getSubscriber();
 		if (subsc != null) {
 			subsc.removePhoneById(phoneId);
 		}
+		Phone phone = model.getPhone(phoneId);
 		model.removePhone(phoneId);
-		notificationController.phoneRemoved(phoneId);
+		notificationController.phoneRemoved(phone);
 	}
 
 	public List<Phone> getPhonesBySubscriber(Long subscriberId) {
@@ -149,21 +150,20 @@ notificationController.phoneAdded(phone);
 		notificationController.addListener(socket);
 	}
 
-	 public boolean tryLockSubscriber(Long id) {
-	        return model.lockSubscriber(id);
-	    }
+	public boolean tryLockSubscriber(Long id) {
+		return model.lockSubscriber(id);
+	}
 
-	    public void unlockSubscriber(Long id) {
-	        model.unlockSubscriber(id);
-	    }
+	public void unlockSubscriber(Long id) {
+		model.unlockSubscriber(id);
+	}
 
-	    public boolean tryLockPhone(Long id) {
-	        return model.lockPhone(id);
-	    }
+	public boolean tryLockPhone(Long id) {
+		return model.lockPhone(id);
+	}
 
-	    public void unlockPhone(Long id) {
-	        model.unlockPhone(id);
-	    }
+	public void unlockPhone(Long id) {
+		model.unlockPhone(id);
+	}
 
-	
 }

@@ -10,14 +10,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import view.interfaces.PhonePanel;
 import model.Phone;
 import controller.Controller;
 
-public class DeletePhone extends JPanel {
+public class DeletePhone extends JPanel implements PhonePanel {
 	private static Controller modelController;
 	private static final long serialVersionUID = 1L;
 	private JLabel info = new JLabel();
-	JComboBox<Object> phoneNumber;
+	private static JComboBox<Object> phoneNumber;
 	Object removeObject = null;
 	Phone lockedPhone;
 
@@ -48,18 +49,13 @@ public class DeletePhone extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				//
 				removeObject = phoneNumber.getSelectedItem();
-				if (removeObject != null
-						&& modelController.tryLockPhone(((Phone) removeObject)
-								.getId())) {
-
+				if (removeObject != null && removeObject==lockedPhone) {
+					//modelController.unlockPhone(((Phone) removeObject).getId());
 					modelController.deletePhone(((Phone) removeObject).getId());
 					info.setText("Phone " + removeObject + " was deleted");
 					phoneNumber.removeItem(removeObject);
 					phoneNumber.updateUI();
-				} else {
-					JOptionPane.showMessageDialog(null,
-							"Phone is currently locked by another user");
-				}
+				} 
 			}
 		});
 		add(phoneChoose);
@@ -72,13 +68,15 @@ public class DeletePhone extends JPanel {
 	}
 	private void lockUnlockPhone() {
 		if (lockedPhone != (Phone) phoneNumber.getSelectedItem()) {
-			if (lockedPhone != null){
+			if (lockedPhone != null) {
 				modelController.unlockPhone(lockedPhone.getId());
-		}
-				lockedPhone = (Phone) phoneNumber.getSelectedItem();
-				Desktop.getInstance().lockObject(lockedPhone);
-		
+			}
+			lockedPhone = (Phone) phoneNumber.getSelectedItem();
+			Desktop.getInstance().lockObject(lockedPhone);
+
 		}
 	}
-
+	public JComboBox<Object> getPhoneNumberComboBox() {
+		return phoneNumber;
+	}
 }

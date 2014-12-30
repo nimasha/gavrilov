@@ -10,10 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import view.interfaces.SubscriberPanel;
 import model.Subscriber;
 import controller.Controller;
 
-public class DeleteSubscriber extends JPanel {
+public class DeleteSubscriber extends JPanel implements SubscriberPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel info = new JLabel();
@@ -78,5 +79,9 @@ public class DeleteSubscriber extends JPanel {
 				Desktop.getInstance().lockObject(lockedSubscriber);
 			
 		}
+	}
+	@Override
+	public JComboBox<Object> getSubscriberComboBox() {
+		return subscriberID;
 	}
 }

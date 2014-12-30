@@ -15,5 +15,5 @@ public interface NotificationController {
 
 	void phoneAdded(Phone phone);
 
-	void phoneRemoved(Long id);
+	void phoneRemoved(Phone phone);
 }

@@ -44,9 +44,9 @@ public class ClientSideNotificationControllerImpl implements
 		}
 	}
 
-	public void phoneRemoved(Long id) {
+	public void phoneRemoved(Phone phone) {
 		for (NotificationListener listener : listeners) {
-			listener.phoneRemoved(id);
+			listener.phoneRemoved(phone);
 		}
 	}
 

@@ -43,8 +43,8 @@ public class ServerSideNotificationController implements NotificationController 
 		notifyListeners(new OperationRequest("phoneAdded", phone));
 	}
 
-	public void phoneRemoved(Long id) {
-		notifyListeners(new OperationRequest("phoneRemoved", id));
+	public void phoneRemoved(Phone phone) {
+		notifyListeners(new OperationRequest("phoneRemoved", phone));
 	}
 
 	private synchronized void notifyListeners(OperationRequest request) {
