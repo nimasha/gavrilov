@@ -53,11 +53,12 @@ public class ServerSideNotificationController implements NotificationController 
 			try {
 				ObjectOutputStream out = new ObjectOutputStream(
 						soc.getOutputStream());
-				//ObjectInputStream in = new ObjectInputStream(
-					//	soc.getInputStream());
+				ObjectInputStream in = new ObjectInputStream(
+						soc.getInputStream());
 				out.writeObject(request);
 				out.flush();
 				out.reset();
+				in.readObject();
 				out.close();
 
 				//OperationResponse res = (OperationResponse) in.readObject();
@@ -68,9 +69,9 @@ public class ServerSideNotificationController implements NotificationController 
 				} else {
 					itemsToDelete.add(soc);
 				}
-			} /*catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
-			}*/ catch (IOException e) {
+			} catch (IOException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
 			}
 		}
