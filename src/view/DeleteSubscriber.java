@@ -32,14 +32,16 @@ public class DeleteSubscriber extends JPanel implements SubscriberPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!modelController
-						.tryLockSubscriber(((Subscriber) subscriberID
-								.getSelectedItem()).getId())&& lockedSubscriber != (Subscriber) subscriberID.getSelectedItem()) {
+				if (subscriberID.getSelectedItem() != null
+						&& !modelController
+								.tryLockSubscriber(((Subscriber) subscriberID
+										.getSelectedItem()).getId())
+						&& lockedSubscriber != (Subscriber) subscriberID
+								.getSelectedItem()) {
 					JOptionPane.showMessageDialog(null,
 							"Subscriber is currently locked by another user");
 					subscriberID.setSelectedIndex(-1);
-				}
-				else{
+				} else {
 					lockUnlockSubscriber();
 				}
 			}
@@ -71,13 +73,14 @@ public class DeleteSubscriber extends JPanel implements SubscriberPanel {
 
 	}
 	private void lockUnlockSubscriber() {
-		if (lockedSubscriber!= (Subscriber) subscriberID.getSelectedItem()) {
-			if (lockedSubscriber != null){
-				modelController.unlockSubscriber(lockedSubscriber.getId());}
-			
-				lockedSubscriber = (Subscriber) subscriberID.getSelectedItem();
-				Desktop.getInstance().lockObject(lockedSubscriber);
-			
+		if (lockedSubscriber != (Subscriber) subscriberID.getSelectedItem()) {
+			if (lockedSubscriber != null) {
+				modelController.unlockSubscriber(lockedSubscriber.getId());
+			}
+
+			lockedSubscriber = (Subscriber) subscriberID.getSelectedItem();
+			Desktop.getInstance().lockObject(lockedSubscriber);
+
 		}
 	}
 	@Override

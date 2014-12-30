@@ -36,12 +36,11 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 
 		JLabel subscriber = new JLabel("Subscriber");
 
-		if (modelController.getSubscribers() != null){
+		if (modelController.getSubscribers() != null) {
 			subscriberT = new JComboBox<>(modelController.getSubscribers()
 					.toArray());
-		subscriberT.setSelectedIndex(-1);	
-		}
-		else
+			subscriberT.setSelectedIndex(-1);
+		} else
 			subscriberT = new JComboBox<>();
 		add(id);
 		add(idT);
@@ -50,24 +49,26 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 		this.add(subscriber);
 		this.add(subscriberT);
 		JButton create = new JButton("Create");
-		
+
 		subscriberT.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!modelController
-						.tryLockSubscriber(((Subscriber) subscriberT
-								.getSelectedItem()).getId())&& lockedSubscriber != (Subscriber) subscriberT.getSelectedItem()) {
+				if (subscriberT.getSelectedItem() != null
+						&& !modelController
+								.tryLockSubscriber(((Subscriber) subscriberT
+										.getSelectedItem()).getId())
+						&& lockedSubscriber != (Subscriber) subscriberT
+								.getSelectedItem()) {
 					JOptionPane.showMessageDialog(null,
 							"Subscriber is currently locked by another user");
 					subscriberT.setSelectedIndex(-1);
-				}
-				else{
+				} else {
 					lockUnlockSubscriber();
 				}
 			}
 		});
-		
+
 		create.addActionListener(new ActionListener() {
 
 			@Override
@@ -97,15 +98,16 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 		setLayout(new GridLayout(4, 2));
 
 	}
-	
+
 	private void lockUnlockSubscriber() {
-		if (lockedSubscriber!= (Subscriber) subscriberT.getSelectedItem()) {
-			if (lockedSubscriber != null){
-				modelController.unlockSubscriber(lockedSubscriber.getId());}
-			
-				lockedSubscriber = (Subscriber) subscriberT.getSelectedItem();
-				Desktop.getInstance().lockObject(lockedSubscriber);
-			
+		if (lockedSubscriber != (Subscriber) subscriberT.getSelectedItem()) {
+			if (lockedSubscriber != null) {
+				modelController.unlockSubscriber(lockedSubscriber.getId());
+			}
+
+			lockedSubscriber = (Subscriber) subscriberT.getSelectedItem();
+			Desktop.getInstance().lockObject(lockedSubscriber);
+
 		}
 	}
 

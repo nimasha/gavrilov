@@ -44,7 +44,8 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!modelController
+				if (subscriberT
+						.getSelectedItem()!=null&&!modelController
 						.tryLockSubscriber(((Subscriber) subscriberT
 								.getSelectedItem()).getId())) {
 					JOptionPane.showMessageDialog(null,

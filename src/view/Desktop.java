@@ -274,7 +274,7 @@ public class Desktop extends JFrame implements NotificationListener {
 					@Override
 					public void run() {
 						((SubscriberPanel) currentModelView)
-								.getSubscriberComboBox().addItem(subscriber);
+								.getSubscriberComboBox().removeItem(subscriber);
 					}
 				});
 			}
