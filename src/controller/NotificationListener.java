@@ -9,7 +9,7 @@ public interface NotificationListener {
 
 	void subscriberAdded(Subscriber subscriber);
 
-	void subscriberRemoved(Long id);
+	void subscriberRemoved(Subscriber subscriber);
 
 	void phoneChanged(Phone phone);
 

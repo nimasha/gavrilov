@@ -95,8 +95,9 @@ public class ServerControllerImpl implements ServerController {
 		for (Phone phone : phones) {
 			model.removePhone(phone.getId());
 		}
+		Subscriber subscToRemove = model.getSubscriber(subscriberId);
 		model.removeSubscriber(subscriberId);
-		notificationController.subscriberRemoved(subscriberId);
+		notificationController.subscriberRemoved(subscToRemove);
 	}
 
 	public void addPhone(Phone phone) {

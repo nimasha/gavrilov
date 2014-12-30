@@ -31,8 +31,9 @@ public class DeletePhone extends JPanel implements PhonePanel {
 		phoneNumber.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!modelController.tryLockPhone(((Phone) phoneNumber
-						.getSelectedItem()).getId())
+				if (phoneNumber.getSelectedItem() != null
+						&& !modelController.tryLockPhone(((Phone) phoneNumber
+								.getSelectedItem()).getId())
 						&& lockedPhone != (Phone) phoneNumber.getSelectedItem()) {
 					JOptionPane.showMessageDialog(null,
 							"Phone is currently locked by another user");
@@ -49,13 +50,14 @@ public class DeletePhone extends JPanel implements PhonePanel {
 			public void actionPerformed(ActionEvent arg0) {
 				//
 				removeObject = phoneNumber.getSelectedItem();
-				if (removeObject != null && removeObject==lockedPhone) {
-					//modelController.unlockPhone(((Phone) removeObject).getId());
+				if (removeObject != null && removeObject == lockedPhone) {
+					// modelController.unlockPhone(((Phone)
+					// removeObject).getId());
 					modelController.deletePhone(((Phone) removeObject).getId());
 					info.setText("Phone " + removeObject + " was deleted");
 					phoneNumber.removeItem(removeObject);
 					phoneNumber.updateUI();
-				} 
+				}
 			}
 		});
 		add(phoneChoose);

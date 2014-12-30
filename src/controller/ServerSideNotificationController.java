@@ -34,8 +34,8 @@ public class ServerSideNotificationController implements NotificationController 
 		notifyListeners(new OperationRequest("subscriberAdded", subscriber));
 	}
 
-	public void subscriberRemoved(Long id) {
-		notifyListeners(new OperationRequest("subscriberRemoved", id));
+	public void subscriberRemoved(Subscriber subscriber) {
+		notifyListeners(new OperationRequest("subscriberRemoved", subscriber));
 	}
 
 	public void phoneChanged(Phone phone) {
@@ -56,15 +56,9 @@ public class ServerSideNotificationController implements NotificationController 
 			try {
 				
 				ObjectOutputStream out = outputStreams.get(soc);
-//				ObjectInputStream in = new ObjectInputStream(
-//						soc.getInputStream());
 				out.writeObject(request);
 				out.flush();
 				out.reset();
-				//in.readObject();
-				//out.close();
-
-				//OperationResponse res = (OperationResponse) in.readObject();
 			} catch (SocketException e) {
 				System.out.println("Connection closed");
 				if (itemsToDelete == null) {
@@ -72,9 +66,7 @@ public class ServerSideNotificationController implements NotificationController 
 				} else {
 					itemsToDelete.add(soc);
 				}
-			} /*catch (ClassNotFoundException e) {
-				System.out.println("Some error in notification"+ e.getStackTrace());
-			} */catch (IOException e) {
+			} catch (IOException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
 			}
 		}

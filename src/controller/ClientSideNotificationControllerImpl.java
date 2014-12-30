@@ -26,9 +26,9 @@ public class ClientSideNotificationControllerImpl implements
 		}
 	}
 
-	public void subscriberRemoved(Long id) {
+	public void subscriberRemoved(Subscriber subscriber) {
 		for (NotificationListener listener : listeners) {
-			listener.subscriberRemoved(id);
+			listener.subscriberRemoved(subscriber);
 		}
 	}
 

@@ -238,14 +238,21 @@ public class Desktop extends JFrame implements NotificationListener {
 	}
 
 	@Override
-	public void subscriberAdded(Subscriber subscriber) {
+	public void subscriberAdded(final Subscriber subscriber) {
 		if (currentModelView != null) {
 			if (currentModelView instanceof UpdateSubscriber
 					|| currentModelView instanceof DeleteSubscriber
 					|| currentModelView instanceof CreatePhone
 					|| currentModelView instanceof UpdatePhone) {
-				((SubscriberPanel) currentModelView).getSubscriberComboBox()
-						.addItem(subscriber);
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						((SubscriberPanel) currentModelView)
+								.getSubscriberComboBox().addItem(subscriber);
+					}
+				});
+
 			}
 		}
 
@@ -255,40 +262,54 @@ public class Desktop extends JFrame implements NotificationListener {
 	}
 
 	@Override
-	public void subscriberRemoved(Long id) {
+	public void subscriberRemoved(final Subscriber subscriber) {
 		if (currentModelView != null) {
 			if (currentModelView instanceof UpdateSubscriber
 					|| currentModelView instanceof DeleteSubscriber
 					|| currentModelView instanceof CreatePhone
 					|| currentModelView instanceof UpdatePhone) {
-				// ((SubscriberPanel) currentModelView).getSubscriberComboBox()
-				// .addItem(subscriber);
+
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						((SubscriberPanel) currentModelView)
+								.getSubscriberComboBox().addItem(subscriber);
+					}
+				});
 			}
 		}
 
-		// System.out.println("Subscriber " + subscriber.toString() +
-		// " was removed");
+		System.out.println("Subscriber " + subscriber.toString()
+				+ " was removed");
 	}
 
 	@Override
-	public void phoneChanged(Phone phone) {
+	public void phoneChanged(final Phone phone) {
 		if (currentModelView != null) {
 			if (currentModelView instanceof UpdatePhone
 					&& ((Phone) ((UpdatePhone) currentModelView)
 							.getPhoneNumberComboBox().getSelectedItem())
 							.getId() == phone.getId()) {
-				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
-						.removeItem(
-								((UpdatePhone) currentModelView)
-										.getPhoneNumberComboBox()
-										.getSelectedItem());
-				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
-						.addItem(phone);
-				((UpdatePhone) currentModelView).getPhoneNumberComboBox()
-						.setSelectedItem(phone);
-				JOptionPane.showMessageDialog(currentModelView, "Phone "
-						+ phone + " was updated");
-				((UpdatePhone) currentModelView).updateFields();
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						((UpdatePhone) currentModelView)
+								.getPhoneNumberComboBox().removeItem(
+										((UpdatePhone) currentModelView)
+												.getPhoneNumberComboBox()
+												.getSelectedItem());
+						((UpdatePhone) currentModelView)
+								.getPhoneNumberComboBox().addItem(phone);
+						((UpdatePhone) currentModelView)
+								.getPhoneNumberComboBox()
+								.setSelectedItem(phone);
+						JOptionPane.showMessageDialog(currentModelView,
+								"Phone " + phone + " was updated");
+						((UpdatePhone) currentModelView).updateFields();
+					}
+				});
 
 			}
 		}
