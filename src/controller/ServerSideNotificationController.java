@@ -58,6 +58,7 @@ public class ServerSideNotificationController implements NotificationController 
 				out.writeObject(request);
 				out.flush();
 				out.reset();
+				out.close();
 
 				//OperationResponse res = (OperationResponse) in.readObject();
 			} catch (SocketException e) {
