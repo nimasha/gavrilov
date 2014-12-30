@@ -28,11 +28,11 @@ public class NotificationsListener implements Runnable{
             while (true)
             {
                 OperationRequest request = (OperationRequest) in.readObject();
-                OperationResponse response =
+                //OperationResponse response =
                 		requestExecutor.executeRequest(request);
-                out.writeObject(response);
-                out.flush();
-                out.reset();
+                //out.writeObject(response);
+                //out.flush();
+                //out.reset();
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
