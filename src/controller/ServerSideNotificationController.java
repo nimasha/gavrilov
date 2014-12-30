@@ -7,7 +7,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import model.Phone;
@@ -18,6 +20,7 @@ import remote.OperationResponse;
 public class ServerSideNotificationController implements NotificationController {
 
 	private List<Socket> listeners;
+	private Map<Socket,ObjectOutputStream> outputStreams = new HashMap<>();
 
 	public ServerSideNotificationController() {
 		listeners = new CopyOnWriteArrayList<Socket>();
@@ -51,15 +54,15 @@ public class ServerSideNotificationController implements NotificationController 
 		List<Socket> itemsToDelete = null;
 		for (Socket soc : listeners) {
 			try {
-				ObjectOutputStream out = new ObjectOutputStream(
-						soc.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(
-						soc.getInputStream());
+				
+				ObjectOutputStream out = outputStreams.get(soc);
+//				ObjectInputStream in = new ObjectInputStream(
+//						soc.getInputStream());
 				out.writeObject(request);
 				out.flush();
 				out.reset();
-				in.readObject();
-				out.close();
+				//in.readObject();
+				//out.close();
 
 				//OperationResponse res = (OperationResponse) in.readObject();
 			} catch (SocketException e) {
@@ -69,19 +72,27 @@ public class ServerSideNotificationController implements NotificationController 
 				} else {
 					itemsToDelete.add(soc);
 				}
-			} catch (ClassNotFoundException e) {
+			} /*catch (ClassNotFoundException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
-			} catch (IOException e) {
+			} */catch (IOException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
 			}
 		}
 
 		if (itemsToDelete != null) {
 			listeners.removeAll(itemsToDelete);
+			for(Socket soc : itemsToDelete)
+			outputStreams.remove(soc);
 		}
 	}
 
 	public void addListener(Socket soc) {
 		listeners.add(soc);
+		try {
+			outputStreams.put(soc, new ObjectOutputStream(
+							soc.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
