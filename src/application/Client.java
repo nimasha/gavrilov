@@ -47,7 +47,7 @@ public class Client {
 
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null,
-					"Some error during initialization, maybe you have nit started server yet");
+					"Some error during initialization, maybe you have not started server yet");
 			e.printStackTrace();
 		}
 	}

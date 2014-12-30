@@ -59,7 +59,7 @@ public class ServerSideNotificationController implements NotificationController 
 				out.flush();
 				out.reset();
 
-				OperationResponse res = (OperationResponse) in.readObject();
+				//OperationResponse res = (OperationResponse) in.readObject();
 			} catch (SocketException e) {
 				System.out.println("Connection closed");
 				if (itemsToDelete == null) {
@@ -67,9 +67,9 @@ public class ServerSideNotificationController implements NotificationController 
 				} else {
 					itemsToDelete.add(soc);
 				}
-			} catch (ClassNotFoundException e) {
+			} /*catch (ClassNotFoundException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
-			} catch (IOException e) {
+			}*/ catch (IOException e) {
 				System.out.println("Some error in notification"+ e.getStackTrace());
 			}
 		}

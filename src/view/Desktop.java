@@ -10,6 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import view.interfaces.PhonePanel;
 import view.interfaces.SubscriberPanel;
@@ -248,7 +249,8 @@ public class Desktop extends JFrame implements NotificationListener {
 			}
 		}
 
-		System.out.println("Subscriber " + subscriber.toString() + " was added");
+		System.out
+				.println("Subscriber " + subscriber.toString() + " was added");
 
 	}
 
@@ -259,12 +261,13 @@ public class Desktop extends JFrame implements NotificationListener {
 					|| currentModelView instanceof DeleteSubscriber
 					|| currentModelView instanceof CreatePhone
 					|| currentModelView instanceof UpdatePhone) {
-				//((SubscriberPanel) currentModelView).getSubscriberComboBox()
-					//	.addItem(subscriber);
+				// ((SubscriberPanel) currentModelView).getSubscriberComboBox()
+				// .addItem(subscriber);
 			}
 		}
 
-		//System.out.println("Subscriber " + subscriber.toString() + " was removed");
+		// System.out.println("Subscriber " + subscriber.toString() +
+		// " was removed");
 	}
 
 	@Override
@@ -294,12 +297,18 @@ public class Desktop extends JFrame implements NotificationListener {
 	}
 
 	@Override
-	public void phoneAdded(Phone phone) {
+	public void phoneAdded(final Phone phone) {
 		if (currentModelView != null) {
 			if (currentModelView instanceof DeletePhone
 					|| currentModelView instanceof UpdatePhone) {
-				((PhonePanel) currentModelView).getPhoneNumberComboBox()
-						.addItem(phone);
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						((PhonePanel) currentModelView)
+								.getPhoneNumberComboBox().addItem(phone);
+					}
+				});
 			}
 		}
 
@@ -307,13 +316,19 @@ public class Desktop extends JFrame implements NotificationListener {
 	}
 
 	@Override
-	public void phoneRemoved(Phone phone) {
+	public void phoneRemoved(final Phone phone) {
 		if (currentModelView != null) {
 			if (currentModelView instanceof DeletePhone
 					|| currentModelView instanceof UpdatePhone) {
+				SwingUtilities.invokeLater(new Runnable() {
 
-				((PhonePanel) currentModelView).getPhoneNumberComboBox()
-						.removeItem(phone);
+					@Override
+					public void run() {
+						((PhonePanel) currentModelView)
+								.getPhoneNumberComboBox().removeItem(phone);
+					}
+				});
+
 			}
 		}
 
