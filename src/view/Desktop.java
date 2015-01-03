@@ -249,8 +249,6 @@ public class Desktop extends JFrame implements NotificationListener {
 						((UpdateSubscriber) currentModelView)
 								.getSubscriberComboBox()
 								.setSelectedItem(subscriber);
-						JOptionPane.showMessageDialog(currentModelView,
-								"Subscriber " + subscriber + " was updated");
 						((UpdatePhone) currentModelView).updateFields();
 					}
 				});
@@ -369,6 +367,7 @@ public class Desktop extends JFrame implements NotificationListener {
 
 					@Override
 					public void run() {
+						
 						((PhonePanel) currentModelView)
 								.getPhoneNumberComboBox().removeItem(phone);
 					}

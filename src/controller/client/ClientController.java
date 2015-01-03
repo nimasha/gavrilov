@@ -29,14 +29,9 @@ public class ClientController implements Controller {
 		return (Subscriber) response.getObject();
 	}
 
-	public void addSubscriber(Subscriber Subscriber) /* throws CreationException */{
+	public void addSubscriber(Subscriber Subscriber) {
 		OperationResponse response = sendMessage(new OperationRequest(
 				"addSubscriber", Subscriber));
-		/*
-		 * if (response.getException() != null && response.getException()
-		 * instanceof CreationException) throw (CreationException)
-		 * response.getException();
-		 */
 	}
 
 	public void replaceSubscriber(Subscriber newSubscriber) {
@@ -47,13 +42,9 @@ public class ClientController implements Controller {
 		sendMessage(new OperationRequest("deleteSubscriber", SubscriberId));
 	}
 
-	public void addPhone(Phone location) /* throws CreationException */{
+	public void addPhone(Phone location) {
 		OperationResponse response = sendMessage(new OperationRequest(
 				"addPhone", location));
-
-		/*if (response.getException() != null	&& response.getException() instanceof CreationException)
-			throw (CreationException) response.getException();*/
-
 	}
 
 	public void replacePhone(Phone location) {

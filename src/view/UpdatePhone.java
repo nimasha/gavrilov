@@ -59,7 +59,7 @@ public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 			}
 		});
 		hoursT.addKeyListener(new DigitFormat());
-		balanceT.addKeyListener(new DigitFormat());
+		balanceT.addKeyListener(new NegativeDigitFormat());
 		JLabel phoneChoose = new JLabel("Choose Phone Number To Update");
 		phoneNumber = new JComboBox<>(modelController.getPhones().toArray());
 		phoneNumber.setSelectedIndex(-1);

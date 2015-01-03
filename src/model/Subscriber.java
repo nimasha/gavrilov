@@ -5,15 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * 
- * @author sasha
- */
-
 public class Subscriber implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6180258311032093626L;
 	private Long id;
 	private String passport;
@@ -120,8 +113,6 @@ public class Subscriber implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are
-		// not set
 		if (!(object instanceof Subscriber)) {
 			return false;
 		}
