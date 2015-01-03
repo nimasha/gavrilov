@@ -10,54 +10,42 @@ public class ValidatorImpl {
 
 	@Test
 	public void testValidateFIO() {
-		//только фамилия и имя с большой буквы в любом порядке, латиницей
+		//Вводится только фамилия, с большой буквы. Если фамилия двойная, то пишется через тире, оба слова с большой буквы.
 			
-		boolean actual = validator.validateFIO("Akimenko Alexander");
+		boolean actual = validator.validateFIO("Akimenko");
 		assertTrue(actual);	
 		
-		actual = validator.validateFIO("Rimskiy-Korsakov Nikolay");
+		actual = validator.validateFIO("Rimskiy-Korsakov");
 		assertTrue(actual);
-		
-		actual = validator.validateFIO("Nikolay Rimskiy-Korsakov");
-		assertTrue(actual);
-		
-		actual = validator.validateFIO("Rimskiy-korsakov Nikolay");
+				
+		actual = validator.validateFIO("Rimskiy-korsakov");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Rimskiy - Korsakov Nikolay");
-		assertFalse(actual);
-		
-		actual = validator.validateFIO("Nikolaeva M.V.");
+		actual = validator.validateFIO("Rimskiy - Korsakov");
 		assertFalse(actual);
 		
 		actual = validator.validateFIO("Nikolaeva M.");
 		assertFalse(actual);
 		
+		actual = validator.validateFIO("Nikolaeva Mariia");
+		assertFalse(actual);
+		
 		actual = validator.validateFIO("Nikolaeva M");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("AKimenko Alexander");
+		actual = validator.validateFIO("AKimenko");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Akimenko ALexander");
+		actual = validator.validateFIO("Akimenko.Alexander");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Akimenko AlexANder");
+		actual = validator.validateFIO("AkiMEnko");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("-Akimenko Alexander");
+		actual = validator.validateFIO("-Akimenko");
 		assertFalse(actual);
-		
-		actual = validator.validateFIO("Akimenko-Alexander");
-		assertFalse(actual);
-		
-		actual = validator.validateFIO("Akimenko Alex-der");
-		assertFalse(actual);
-		
-		actual = validator.validateFIO("Akimenko Alexder-");
-		assertFalse(actual);
-		
-		actual = validator.validateFIO("Akimenko");
+				
+		actual = validator.validateFIO("Akimenko-");
 		assertFalse(actual);
 		
 		actual = validator.validateFIO("Akimenko Alexander Alexandrovich");
@@ -66,16 +54,16 @@ public class ValidatorImpl {
 		actual = validator.validateFIO("akimenko alexander Alexandrovich");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Ak4imenko Alexder");
+		actual = validator.validateFIO("Ak4imenko");
 		assertFalse(actual);
 		
 		actual = validator.validateFIO("AkimenkoAlexder");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Николаева Мария");
+		actual = validator.validateFIO("Николаева");
 		assertFalse(actual);
 		
-		actual = validator.validateFIO("Nikolaeva, Mariia");
+		actual = validator.validateFIO("Nikolaeva,Mariia");
 		assertFalse(actual);
 		
 		actual = validator.validateFIO("Akimenko/Alevander");
@@ -84,6 +72,7 @@ public class ValidatorImpl {
 
 	@Test
 	public void testValidatePassport() {
+		//Ввод серии и номера паспорта. Только цифры, в формате ss ss nnnnnn (s - серия, n - номер)
 		boolean actual = validator.validatePassport("34 34 343434");
 		assertTrue(actual);
 		
@@ -133,7 +122,7 @@ public class ValidatorImpl {
 	
 	@Test
 	public void testValidateDate() {
-		//dd/mm/yyyy
+		//Ввод даты в формате dd/mm/yyyy . Нельзя ввести дату, которая еще не наступила.
 		boolean actual = validator.validateDate("01/12/2000");
 		assertTrue(actual);
 		
@@ -210,7 +199,9 @@ public class ValidatorImpl {
 	
 	@Test
 	public void testValidateBalance() {
-		//-34.89
+		/*Ввод баланса. При разделении целой и дробной части используется знак ".". 
+		При вводе отрицательных значений используется "-".
+		Все цифры и знаки вводятся без пробелов*/
 		boolean actual = validator.validateBalance("-35.89");
 		assertTrue(actual);
 		
