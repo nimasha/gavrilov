@@ -224,6 +224,7 @@ public class Desktop extends JFrame implements NotificationListener {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 				unlockSomething();
+				System.exit(1);
 			}
 		});
 	}

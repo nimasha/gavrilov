@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import view.interfaces.SubscriberPanel;
+import view.validator.ValidatorImpl;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
@@ -32,6 +33,7 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 	private static Controller modelController;
 	Subscriber chosenSubscrier;
 	Subscriber lockedSubscriber;
+	ValidatorImpl validator = ValidatorImpl.getInstance();
 	public UpdateSubscriber(Controller modelControllerExt) {
 		modelController = modelControllerExt;
 		subscriberT = new JComboBox<>(modelController.getSubscribers()
@@ -65,6 +67,9 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (chosenSubscrier != null) {
+					if (validator.validateFIO(fioT.getText())) {
+						if (validator.validateDate(birthdayT.getText())) {
+							if (validator.validateDate(passportT.getText())) {
 					Subscriber s = new Subscriber();
 					s.setId(chosenSubscrier.getId());
 					s.setBirthday(birthdayT.getText());
@@ -89,6 +94,18 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 					updateUIOfSubscriber();
 					updateFields();
 					info.setText("Subscriber " + s.getFio() + " was updated");
+							} else {
+								JOptionPane.showMessageDialog(null,
+										Constants.PASSPORT_ERROR_MESSAGE);
+							}
+						} else {
+							JOptionPane.showMessageDialog(null,
+									Constants.DATE_ERROR_MESSAGE);
+						}
+					} else {
+						JOptionPane.showMessageDialog(null,
+								Constants.NAME_ERROR_MESSAGE);
+					}
 				} else {
 					info.setText("Please select a subscriber");
 				}

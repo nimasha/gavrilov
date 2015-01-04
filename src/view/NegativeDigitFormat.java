@@ -22,7 +22,7 @@ public class NegativeDigitFormat implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		if (!(Character.isDigit(c) || (c=='-')|| (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+		if (!(Character.isDigit(c) || (c=='-')||(c=='.')|| (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
 			e.consume();
 		}
 

@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import view.interfaces.SubscriberPanel;
+import view.validator.ValidatorImpl;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
@@ -29,7 +30,7 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 		modelController = modelControllerExt;
 		// setLayout(new BorderLayout().);
 		idT.addKeyListener(new DigitFormat());
-		balanceT.addKeyListener(new DigitFormat());
+		balanceT.addKeyListener(new NegativeDigitFormat());
 		JLabel id = new JLabel("Phone Number");
 
 		JLabel balance = new JLabel("Balance");
@@ -73,19 +74,25 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				String balanceText = balanceT.getText();
 				if (!idT.getText().isEmpty()) {
-					Double balance;
-					if (balanceT.getText().isEmpty()) {
-						balance = 0.0;
-					} else {
-						balance = new Double(balanceT.getText());
-					}
-					Phone p = new Phone(new Long(idT.getText()), balance,
-							(Subscriber) subscriberT.getSelectedItem());
-					modelController.addPhone(p);
+					if (ValidatorImpl.getInstance()
+							.validateBalance(balanceText)) {
+						Double balance;
+						if (balanceText.isEmpty()) {
+							balance = 0.0;
+						} else {
+							balance = new Double(balanceText);
+						}
+						Phone p = new Phone(new Long(idT.getText()), balance,
+								(Subscriber) subscriberT.getSelectedItem());
+						modelController.addPhone(p);
 
-					info.setText("Pone with number " + idT.getText()
-							+ "  was successfully created");
+						info.setText("Pone with number " + idT.getText()
+								+ "  was successfully created");
+					} else {
+						JOptionPane.showMessageDialog(null, Constants.BALANCE_ERROR_MESSAGE);
+					}
 				} else {
 					info.setText("Please input at least the ID");
 				}
@@ -98,7 +105,6 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 		setLayout(new GridLayout(4, 2));
 
 	}
-
 	private void lockUnlockSubscriber() {
 		if (lockedSubscriber != (Subscriber) subscriberT.getSelectedItem()) {
 			if (lockedSubscriber != null) {

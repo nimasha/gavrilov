@@ -9,9 +9,11 @@ import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import view.validator.ValidatorImpl;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
@@ -26,6 +28,7 @@ public class CreateSubscriber extends JPanel {
 	JTextField birthdayT = new JTextField();
 	JTextField phones = new JTextField();
 	JLabel info = new JLabel();
+	ValidatorImpl validator = ValidatorImpl.getInstance();
 
 	public CreateSubscriber(Controller modelControllerExt) {
 		// String[] demo = { " ", "1", "2", "3" };
@@ -50,27 +53,39 @@ public class CreateSubscriber extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!fioT.getText().isEmpty()) {
-					Subscriber s = new Subscriber(new Random().nextLong(), pasT
-							.getText(), fioT.getText(), addressT.getText(),
-							birthdayT.getText());
-					List<Phone> list = new ArrayList<>();
-					Phone p;
-					if (!phones.getText().isEmpty()) {
-						for (String phone : phones.getText().split(",")) {
-							p = new Phone();
-							p.setId(new Long(phone));
-							p.setSubscriber(s);
-							modelController.addPhone(p);
-							list.add(p);
+				if (validator.validateFIO(fioT.getText())) {
+					if (validator.validateDate(birthdayT.getText())) {
+						if (validator.validateDate(pasT.getText())) {
+							Subscriber s = new Subscriber(new Random()
+									.nextLong(), pasT.getText(),
+									fioT.getText(), addressT.getText(),
+									birthdayT.getText());
+							List<Phone> list = new ArrayList<>();
+							Phone p;
+							if (!phones.getText().isEmpty()) {
+								for (String phone : phones.getText().split(",")) {
+									p = new Phone();
+									p.setId(new Long(phone));
+									p.setSubscriber(s);
+									modelController.addPhone(p);
+									list.add(p);
+								}
+								s.setPhoneList(list);
+							}
+							modelController.addSubscriber(s);
+							info.setText("Subscriber " + fioT.getText()
+									+ " was successfully created");
+						} else {
+							JOptionPane.showMessageDialog(null,
+									Constants.PASSPORT_ERROR_MESSAGE);
 						}
-						s.setPhoneList(list);
+					} else {
+						JOptionPane.showMessageDialog(null,
+								Constants.DATE_ERROR_MESSAGE);
 					}
-					modelController.addSubscriber(s);
-					info.setText("Subscriber " + fioT.getText()
-							+ " was successfully created");
 				} else {
-					info.setText("Please input fio");
+					JOptionPane.showMessageDialog(null,
+							Constants.NAME_ERROR_MESSAGE);
 				}
 			}
 		});

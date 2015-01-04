@@ -20,7 +20,7 @@ import remote.OperationResponse;
 public class ServerSideNotificationController implements NotificationController {
 
 	private List<Socket> listeners;
-	private Map<Socket,ObjectOutputStream> outputStreams = new HashMap<>();
+	private Map<Socket, ObjectOutputStream> outputStreams = new HashMap<>();
 
 	public ServerSideNotificationController() {
 		listeners = new CopyOnWriteArrayList<Socket>();
@@ -54,7 +54,7 @@ public class ServerSideNotificationController implements NotificationController 
 		List<Socket> itemsToDelete = null;
 		for (Socket soc : listeners) {
 			try {
-				
+
 				ObjectOutputStream out = outputStreams.get(soc);
 				out.writeObject(request);
 				out.flush();
@@ -67,22 +67,36 @@ public class ServerSideNotificationController implements NotificationController 
 					itemsToDelete.add(soc);
 				}
 			} catch (IOException e) {
-				System.out.println("Some error in notification"+ e.getStackTrace());
+				System.out.println("Some error in notification"
+						+ e.getStackTrace());
 			}
 		}
 
 		if (itemsToDelete != null) {
 			listeners.removeAll(itemsToDelete);
-			for(Socket soc : itemsToDelete)
-			outputStreams.remove(soc);
+			for (Socket soc : itemsToDelete) {
+				try {
+					outputStreams.get(soc).flush();
+					outputStreams.get(soc).close();
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				outputStreams.remove(soc);
+				try {	
+					soc.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
 	public void addListener(Socket soc) {
 		listeners.add(soc);
 		try {
-			outputStreams.put(soc, new ObjectOutputStream(
-							soc.getOutputStream()));
+			outputStreams.put(soc,
+					new ObjectOutputStream(soc.getOutputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

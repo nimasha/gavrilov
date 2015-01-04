@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import view.interfaces.PhonePanel;
 import view.interfaces.SubscriberPanel;
+import view.validator.ValidatorImpl;
 import model.Phone;
 import model.Subscriber;
 import controller.Controller;
@@ -89,32 +90,40 @@ public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (chosenPhone != null) {
-					Phone p = new Phone();
-					p.setId(chosenPhone.getId());
-					Double balance;
-					Double hours;
+					if (ValidatorImpl.getInstance().validateBalance(
+							balanceT.getText())) {
+						Phone p = new Phone();
+						p.setId(chosenPhone.getId());
+						Double balance;
+						Double hours;
 
-					if (balanceT.getText().isEmpty()) {
-						p.setBalance(0.0);
+						if (balanceT.getText().isEmpty()) {
+							p.setBalance(0.0);
+						} else {
+							p.setBalance(new Double(balanceT.getText()));
+						}
+						if (hoursT.getText().isEmpty()) {
+							p.setHours(0.0);
+						} else {
+							p.setHours(new Double(hoursT.getText()));
+						}
+
+						p.setSubscriber((Subscriber) subscriberT
+								.getSelectedItem());
+						modelController.replacePhone(p,
+								chosenPhone.getSubscriber());
+
+						phoneNumber.removeAllItems();
+						phoneNumber.setModel(new DefaultComboBoxModel<Object>(
+								modelController.getPhones().toArray()));
+						phoneNumber.setSelectedItem(p);
+						updateUIOfSubscriber();
+						updateFields();
+						info.setText("Phone " + p.getId() + " was updated");
 					} else {
-						p.setBalance(new Double(balanceT.getText()));
+						JOptionPane.showMessageDialog(null,
+								Constants.BALANCE_ERROR_MESSAGE);
 					}
-					if (hoursT.getText().isEmpty()) {
-						p.setHours(0.0);
-					} else {
-						p.setHours(new Double(hoursT.getText()));
-					}
-
-					p.setSubscriber((Subscriber) subscriberT.getSelectedItem());
-					modelController.replacePhone(p, chosenPhone.getSubscriber());
-
-					phoneNumber.removeAllItems();
-					phoneNumber.setModel(new DefaultComboBoxModel<Object>(
-							modelController.getPhones().toArray()));
-					phoneNumber.setSelectedItem(p);
-					updateUIOfSubscriber();
-					updateFields();
-					info.setText("Phone " + p.getId() + " was updated");
 				}
 			}
 		});

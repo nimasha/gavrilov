@@ -18,21 +18,21 @@ public class Client {
 	public static void main(String args[]) throws NotBoundException {
 
 		try {
-			
+
 			ServerSocket serverSocket = new ServerSocket(4444);
 			Socket server = new Socket("localhost", 5555);
 			Socket notificationSocket = serverSocket.accept();
 
 			Controller controller = new ClientController(server);
 			ClientSideNotificationController notificationController = new ClientSideNotificationControllerImpl();
-			
-		    final Desktop desktop = new Desktop(controller);
+
+			final Desktop desktop = new Desktop(controller);
 			notificationController.registerListener(desktop);
 
 			Thread notificationListener = new Thread(new NotificationsListener(
 					notificationSocket, notificationController));
 			notificationListener.start();
-		   
+
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
@@ -40,14 +40,15 @@ public class Client {
 						desktop.setSize(640, 480);
 						desktop.setVisible(true);
 					} catch (Exception ex) {
-
+						ex.printStackTrace();
 					}
 				}
 			});
 
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Some error during initialization, maybe you have not started server yet");
+			JOptionPane
+					.showMessageDialog(null,
+							"Some error during initialization, maybe you have not started server yet");
 			e.printStackTrace();
 		}
 	}

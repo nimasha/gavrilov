@@ -68,6 +68,9 @@ public class ValidatorImpl {
 		
 		actual = validator.validateFIO("Akimenko/Alevander");
 		assertFalse(actual);
+		
+		actual = validator.validateFIO("");
+		assertFalse(actual);
 	}
 
 	@Test
@@ -117,12 +120,13 @@ public class ValidatorImpl {
 		
 		actual = validator.validatePassport("343434 3 434");
 		assertFalse(actual);
-		
+		actual = validator.validatePassport("");
+		assertTrue(actual);
 	}
 	
 	@Test
 	public void testValidateDate() {
-		//Ввод даты в формате dd/mm/yyyy . Нельзя ввести дату, которая еще не наступила.
+		//Ввод даты в формате dd/mm/yyyy.
 		boolean actual = validator.validateDate("01/12/2000");
 		assertTrue(actual);
 		
@@ -150,8 +154,8 @@ public class ValidatorImpl {
 		actual = validator.validateDate("32/02/2013");
 		assertFalse(actual);
 		
-		actual = validator.validateDate("29/03/2016");
-		assertFalse(actual);
+		/*actual = validator.validateDate("29/03/2016");
+		assertFalse(actual);*/
 		
 		actual = validator.validateDate("32/32/2013");
 		assertFalse(actual);
@@ -177,8 +181,8 @@ public class ValidatorImpl {
 		actual = validator.validateDate("29/2/2013");
 		assertFalse(actual);
 		
-		actual = validator.validateDate("9/12/2013");
-		assertFalse(actual);
+		actual = validator.validateDate("09/12/2013");
+		assertTrue(actual);
 		
 		actual = validator.validateDate("dd/02/2013");
 		assertFalse(actual);
@@ -191,7 +195,8 @@ public class ValidatorImpl {
 		
 		actual = validator.validateDate("dd/mm/yyyy");
 		assertFalse(actual);
-		
+		actual = validator.validateDate("");
+		assertTrue(actual);
 				
 	}
 	
@@ -265,8 +270,8 @@ public class ValidatorImpl {
 		actual = validator.validateBalance("1 099.67");
 		assertFalse(actual);
 		
-		actual = validator.validateBalance("10-99.12");
-		assertFalse(actual);
+		actual = validator.validateBalance("");
+		assertTrue(actual);
 		
 		
 		
