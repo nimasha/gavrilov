@@ -23,14 +23,14 @@ public class RequestProcessor implements Runnable {
 	}
 
 	public void run() {
+		ObjectOutputStream out = null;
+		ObjectInputStream in = null;
 		try {
 			Socket clientNotifier = new Socket(client.getInetAddress(), 4444);
 			controller.addListener(clientNotifier);
 
-			ObjectOutputStream out = new ObjectOutputStream(
-					client.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(
-					client.getInputStream());
+			out = new ObjectOutputStream(client.getOutputStream());
+			in = new ObjectInputStream(client.getInputStream());
 
 			while (true) {
 				OperationRequest request = (OperationRequest) in.readObject();
@@ -42,6 +42,12 @@ public class RequestProcessor implements Runnable {
 			}
 		} catch (SocketException e) {
 			System.out.println("Client disconnected");
+			try {
+				out.close();
+				in.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

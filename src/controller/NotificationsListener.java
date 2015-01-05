@@ -22,9 +22,9 @@ public class NotificationsListener implements Runnable {
 	}
 
 	public void run() {
-		try {
-			ObjectInputStream in = new ObjectInputStream(
-					socketToListen.getInputStream());
+		// ObjectInputStream in=null;
+		try (ObjectInputStream in = new ObjectInputStream(
+				socketToListen.getInputStream());) {
 			while (true) {
 				OperationRequest request = (OperationRequest) in.readObject();
 				requestExecutor.executeRequest(request);

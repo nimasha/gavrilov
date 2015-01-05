@@ -76,18 +76,12 @@ public class ServerSideNotificationController implements NotificationController 
 			listeners.removeAll(itemsToDelete);
 			for (Socket soc : itemsToDelete) {
 				try {
-					outputStreams.get(soc).flush();
 					outputStreams.get(soc).close();
-					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				outputStreams.remove(soc);
-				try {	
-					soc.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				
 			}
 		}
 	}
