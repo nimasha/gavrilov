@@ -19,18 +19,30 @@ public class Client {
 
 		try {
 
-			ServerSocket serverSocket = new ServerSocket(4444);
-			Socket server = new Socket("localhost", 5555);
-			Socket notificationSocket = serverSocket.accept();
+			final ServerSocket serverSocket = new ServerSocket(4444);
+			final Socket server = new Socket("localhost", 5555);
+			final Socket notificationSocket = serverSocket.accept();
 
 			Controller controller = new ClientController(server);
 			ClientSideNotificationController notificationController = new ClientSideNotificationControllerImpl();
 
 			final Desktop desktop = new Desktop(controller);
 			notificationController.registerListener(desktop);
-
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				public void run() {
+					try {
+						notificationSocket.close();
+						serverSocket.close();
+						server.close();
+						System.out.println("The server is shut down!");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			Thread notificationListener = new Thread(new NotificationsListener(
 					notificationSocket, notificationController));
+
 			notificationListener.start();
 
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
