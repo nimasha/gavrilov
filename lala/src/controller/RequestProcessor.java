@@ -38,18 +38,11 @@ public class RequestProcessor implements Runnable {
 		try {
 			clientNotifier = new Socket(client.getInetAddress(), 4444);
 			controller.addListener(clientNotifier);
-		/*} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-		
-		
-		/*try (*/ObjectOutputStream out = new ObjectOutputStream(
-				client.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(
-						client.getInputStream());
-		/*) {*/
-			
+
+			ObjectOutputStream out = new ObjectOutputStream(
+					client.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(
+					client.getInputStream());
 
 			while (true) {
 				JAXBContext jaxbContext;
@@ -65,7 +58,7 @@ public class RequestProcessor implements Runnable {
 						.unmarshal(new StringReader(xmlRequest));
 				OperationResponse response = requestExecutor
 						.executeRequest(request);
-			
+
 				StringWriter sw = new StringWriter();
 				jaxbMarshaller.marshal(response, sw);
 				String xmlString = sw.toString();
@@ -74,7 +67,6 @@ public class RequestProcessor implements Runnable {
 				out.flush();
 				out.reset();
 
-			
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();

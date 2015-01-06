@@ -61,8 +61,7 @@ public class ServerSideNotificationController implements NotificationController 
 		List<Socket> itemsToDelete = null;
 		for (Socket soc : listeners) {
 			try {
-				ObjectOutputStream out = 
-						outputStreams.get(soc);
+				ObjectOutputStream out = outputStreams.get(soc);
 				JAXBContext jaxbContext;
 
 				jaxbContext = JAXBContext.newInstance(OperationResponse.class,
