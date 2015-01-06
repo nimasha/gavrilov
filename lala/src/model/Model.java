@@ -60,10 +60,10 @@ public class Model implements Serializable, ModelInterface {
 	/* (non-Javadoc)
 	 * @see model.ModelInterface#getPhonesBySubscriber(java.lang.Long)
 	 */
-	@Override
+	/*@Override
 	public List<Long> getPhonesBySubscriber(final Long subscriberId) {
 		return subscribers.get(subscriberId).getPhoneList();
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see model.ModelInterface#getPhones()
@@ -181,5 +181,11 @@ public class Model implements Serializable, ModelInterface {
 	@Override
 	public void unlockPhone(Long id) {
 		lockedPhones.remove(id);
+	}
+
+	@Override
+	public List<Long> getPhonesBySubscriber(Long subscriberId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -40,19 +40,20 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 				.toArray());
 		subscriberT.setSelectedIndex(-1);
 		phoneNumber.addKeyListener(new DigitFomatWithComma());
-		passportT.addKeyListener(new DigitFormat());
+		passportT.addKeyListener(new DigitFormatWithSpace());
 		JButton update = new JButton("Update");
 		subscriberT.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (subscriberT
-						.getSelectedItem()!=null&&!modelController
-						.tryLockSubscriber(((Subscriber) subscriberT
-								.getSelectedItem()).getId())) {
-					JOptionPane.showMessageDialog(null,
-							"Subscriber is currently locked by another user all fields will be uneditable");
-				setAllEditable(false);
+				if (subscriberT.getSelectedItem() != null
+						&& !modelController
+								.tryLockSubscriber(((Subscriber) subscriberT
+										.getSelectedItem()).getId())) {
+					JOptionPane
+							.showMessageDialog(null,
+									"Subscriber is currently locked by another user all fields will be uneditable");
+					setAllEditable(false);
 				} else {
 					setAllEditable(true);
 					lockUnlockSubscriber();
@@ -70,30 +71,42 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 					if (validator.validateFIO(fioT.getText())) {
 						if (validator.validateDate(birthdayT.getText())) {
 							if (validator.validateDate(passportT.getText())) {
-					Subscriber s = new Subscriber();
-					s.setId(chosenSubscrier.getId());
-					s.setBirthday(birthdayT.getText());
-					s.setPassport(passportT.getText());
-					s.setFio(fioT.getText());
-					s.setAddress(addressT.getText());
-					List<Long> list = new ArrayList<>();
-					Phone p;
-					for (String phone : phoneNumber.getText().split(",")) {
-						p = new Phone();
-						p.setId(new Long(phone));
-						p.setSubscriber(s.getId());
-						modelController.addPhone(p);
-						list.add(p.getId());
-					}
-					s.setPhoneList(list);
-					modelController.replaceSubscriber(s);
-					subscriberT.removeAllItems();
-					subscriberT.setModel(new DefaultComboBoxModel<Object>(
-							modelController.getSubscribers().toArray()));
-					subscriberT.setSelectedItem(s);
-					updateUIOfSubscriber();
-					updateFields();
-					info.setText("Subscriber " + s.getFio() + " was updated");
+								Subscriber s = new Subscriber();
+								s.setId(chosenSubscrier.getId());
+								s.setBirthday(birthdayT.getText());
+								s.setPassport(passportT.getText());
+								s.setFio(fioT.getText());
+								s.setAddress(addressT.getText());
+
+								Phone p;
+								for (String phone : phoneNumber.getText()
+										.split(",")) {
+									if (!phone.isEmpty()) {
+										p = modelController.getPhone(new Long(
+												phone));
+										if (p == null) {
+											p = new Phone(new Long(phone));
+											p.setSubscriber(s.getId());
+											modelController.addPhone(p);
+										} else {
+											p.setSubscriber(s.getId());
+											modelController.replacePhone(p,
+													null);
+										}
+									}
+								}
+								modelController.replaceSubscriber(s);
+								subscriberT.removeAllItems();
+								subscriberT
+										.setModel(new DefaultComboBoxModel<Object>(
+												modelController
+														.getSubscribers()
+														.toArray()));
+								subscriberT.setSelectedItem(s);
+								updateUIOfSubscriber();
+								updateFields();
+								info.setText("Subscriber " + s.getFio()
+										+ " was updated");
 							} else {
 								JOptionPane.showMessageDialog(null,
 										Constants.PASSPORT_ERROR_MESSAGE);
@@ -142,10 +155,19 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 			chosenSubscrier = (Subscriber) subscriberT.getSelectedItem();
 			birthdayT.setText(chosenSubscrier.getBirthday());
 			addressT.setText(chosenSubscrier.getAddress());
-			if (chosenSubscrier.getPhoneList() != null)
-				phoneNumber.setText(chosenSubscrier.getPhoneListAsString());
-			else
-				phoneNumber.setText("");
+			/*
+			 * if (chosenSubscrier.getPhoneList() != null)
+			 * phoneNumber.setText(chosenSubscrier.getPhoneListAsString()); else
+			 * phoneNumber.setText("");
+			 */
+			 StringBuilder sb = new StringBuilder("");
+			for(Long phone :modelController.getPhonesBySubscriber(chosenSubscrier.getId())){
+				if(sb.length()>0){
+					sb.append(",");
+				}
+				sb.append(phone);
+			}
+			phoneNumber.setText(sb.toString());
 			fioT.setText(chosenSubscrier.getFio());
 			passportT.setText(chosenSubscrier.getPassport());
 		}

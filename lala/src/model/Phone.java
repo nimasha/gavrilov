@@ -19,6 +19,8 @@ public class Phone implements Serializable {
 
 	public Phone(Long id) {
 		this.id = id;
+		this.hours = 0;
+		this.balance = 0;
 	}
 
 	public Phone(Long id, double balance, Long sId) {

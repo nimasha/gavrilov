@@ -3,6 +3,7 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,10 +13,10 @@ import db.DBHelper;
 
 public class DBModel implements ModelInterface {
 	private DBHelper dbHelper;
-	
-	private Set<Long> lockedSubscribers;
-	
-	private Set<Long> lockedPhones;
+
+	private Set<Long> lockedSubscribers = new HashSet<Long>();
+
+	private Set<Long> lockedPhones = new HashSet<Long>();
 	public DBModel() {
 
 	}
@@ -30,7 +31,7 @@ public class DBModel implements ModelInterface {
 				"getPhone");
 	}
 
-	@Override
+	
 	public List<Long> getPhonesBySubscriber(Long subscriberId) {
 
 		return dbHelper.executeSelect(
@@ -52,15 +53,14 @@ public class DBModel implements ModelInterface {
 		String query = "select * from Subscriber";
 		List<Subscriber> result = dbHelper.executeSelect(query,
 				"getSubscribers");
-		List<Subscriber> result1 = new ArrayList<>();
-		for (Subscriber subs : result) {
-			subs.setPhoneList(getPhonesBySubscriber(subs.getId()));
-			result1.add(subs);
-		}
-		return result1;
+		//List<Subscriber> result1 = new ArrayList<>();
+		//for (Subscriber subs : result) {
+			//subs.setPhoneList(getPhonesBySubscriber(subs.getId()));
+			//result1.add(subs);
+		//}
+		return result;
 	}
 
-	
 	@Override
 	public void addPhone(Phone phone) {
 		String query = String
@@ -84,7 +84,8 @@ public class DBModel implements ModelInterface {
 		String query = String
 				.format("update Subscriber set passport='%s', fio = '%s', address = '%s', birthday='%s'  where id=%d",
 						newSubscriber.getPassport(), newSubscriber.getFio(),
-						newSubscriber.getAddress(), newSubscriber.getBirthday(),newSubscriber.getId());
+						newSubscriber.getAddress(),
+						newSubscriber.getBirthday(), newSubscriber.getId());
 		dbHelper.executeStatement(query);
 	}
 	@Override
@@ -114,7 +115,9 @@ public class DBModel implements ModelInterface {
 		return lockedSubscribers.contains(id);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.ModelInterface#lockSubscriber(java.lang.Long)
 	 */
 	@Override
@@ -125,7 +128,9 @@ public class DBModel implements ModelInterface {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.ModelInterface#unlockSubscriber(java.lang.Long)
 	 */
 	@Override
@@ -133,7 +138,9 @@ public class DBModel implements ModelInterface {
 		lockedSubscribers.remove(id);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.ModelInterface#isPhoneLocked(java.lang.Long)
 	 */
 	@Override
@@ -141,7 +148,9 @@ public class DBModel implements ModelInterface {
 		return lockedPhones.contains(id);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.ModelInterface#lockPhone(java.lang.Long)
 	 */
 	@Override
@@ -152,7 +161,9 @@ public class DBModel implements ModelInterface {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.ModelInterface#unlockPhone(java.lang.Long)
 	 */
 	@Override
@@ -164,9 +175,8 @@ public class DBModel implements ModelInterface {
 	public Subscriber getSubscriber(Long id) {
 		Subscriber res = dbHelper.executeSelect(
 				"select * from Subscriber where id=" + id, "getSubscriber");
-		res.setPhoneList(getPhonesBySubscriber(id));
+		//res.setPhoneList(getPhonesBySubscriber(id));
 		return res;
 	}
 
-	
 }

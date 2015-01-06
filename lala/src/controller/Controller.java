@@ -16,7 +16,11 @@ public interface Controller {
 	public void deleteSubscriber(Long subscriberId);
 
 	public void addPhone(Phone phone);
-
+/**
+ * 
+ * @param phone
+ * @param oldSubscriber - just set null
+ */
 	public void replacePhone(Phone phone, Long oldSubscriber);
 
 	public Phone getPhone(Long id);

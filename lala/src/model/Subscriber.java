@@ -17,15 +17,15 @@ public class Subscriber implements Serializable {
 	private String fio;
 	private String address;
 	private String birthday;
-	private List<Long> phoneIdList;
+	//private List<Long> phoneIdList;
 
 	public Subscriber() {
-		phoneIdList = new ArrayList<>();
+		//phoneIdList = new ArrayList<>();
 	}
 
 	public Subscriber(Long id) {
 		this.id = id;
-		phoneIdList = new ArrayList<>();
+		//phoneIdList = new ArrayList<>();
 	}
 
 	public Subscriber(Long id, String passport, String fio, String address,
@@ -35,7 +35,7 @@ public class Subscriber implements Serializable {
 		this.fio = fio;
 		this.address = address;
 		this.birthday = birthday;
-		phoneIdList = new ArrayList<>();
+		//phoneIdList = new ArrayList<>();
 	}
 	//@XmlAttribute
 	public Long getId() {
@@ -77,12 +77,12 @@ public class Subscriber implements Serializable {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	//@XmlAttribute
+/*	//@XmlAttribute
 	public List<Long> getPhoneList() {
 		return phoneIdList;
-	}
+	}*/
 
-	public String getPhoneListAsString() {
+	/*public String getPhoneListAsString() {
 		String result = "";
 		for (Long p : phoneIdList) {
 			result += p.toString() + ",";
@@ -91,9 +91,9 @@ public class Subscriber implements Serializable {
 			return result.substring(0, result.length() - 1);
 		else
 			return "";
-	}
+	}*/
 
-	public void setPhoneList(List<Long> phoneIdList) {
+	/*public void setPhoneList(List<Long> phoneIdList) {
 		this.phoneIdList = phoneIdList;
 	}
 
@@ -106,7 +106,7 @@ public class Subscriber implements Serializable {
 				}
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public int hashCode() {

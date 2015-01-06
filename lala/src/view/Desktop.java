@@ -328,8 +328,8 @@ public class Desktop extends JFrame implements NotificationListener {
 						((UpdatePhone) currentModelView)
 								.getPhoneNumberComboBox()
 								.setSelectedItem(phone);
-						JOptionPane.showMessageDialog(currentModelView,
-								"Phone " + phone + " was updated");
+						/*JOptionPane.showMessageDialog(currentModelView,
+								"Phone " + phone + " was updated");*/
 						((UpdatePhone) currentModelView).updateFields();
 					}
 				});

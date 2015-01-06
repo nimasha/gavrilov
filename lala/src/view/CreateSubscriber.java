@@ -36,7 +36,7 @@ public class CreateSubscriber extends JPanel {
 		// this.add(new JLabel("ID"));
 		// this.add(idT);
 		phones.addKeyListener(new DigitFomatWithComma());
-		pasT.addKeyListener(new DigitFormat());
+		pasT.addKeyListener(new DigitFormatWithSpace());
 		this.add(new JLabel("Passport"));
 		this.add(pasT);
 		this.add(new JLabel("FIO"));
@@ -60,7 +60,7 @@ public class CreateSubscriber extends JPanel {
 									.nextLong(), pasT.getText(),
 									fioT.getText(), addressT.getText(),
 									birthdayT.getText());
-							List<Long> list = new ArrayList<>();
+							//List<Long> list = new ArrayList<>();
 							Phone p;
 							if (!phones.getText().isEmpty()) {
 								for (String phone : phones.getText().split(",")) {
@@ -68,9 +68,9 @@ public class CreateSubscriber extends JPanel {
 									p.setId(new Long(phone));
 									p.setSubscriber(s.getId());
 									modelController.addPhone(p);
-									list.add(p.getId());
+									//list.add(p.getId());
 								}
-								s.setPhoneList(list);
+								/*s.setPhoneList(list);*/
 							}
 							modelController.addSubscriber(s);
 							info.setText("Subscriber " + fioT.getText()

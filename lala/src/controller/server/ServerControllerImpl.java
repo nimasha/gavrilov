@@ -44,7 +44,7 @@ public class ServerControllerImpl implements ServerController {
 	public void replaceSubscriber(Subscriber newSubscriber) {
 		if (newSubscriber == null)
 			return;
-		model.addSubscriber(newSubscriber);
+		model.changeSubscriber(newSubscriber);
 		notificationController.subscriberChanged(newSubscriber);
 	}
 
@@ -52,7 +52,8 @@ public class ServerControllerImpl implements ServerController {
 
 		List<Long> phones = model.getPhonesBySubscriber(subscriberId);
 		for (Long phone : phones) {
-			model.removePhone(phone);
+			model.changePhone(new Phone(phone));
+			//model.removePhone(id);
 		}
 		Subscriber subscToRemove = model.getSubscriber(subscriberId);
 		model.removeSubscriber(subscriberId);
@@ -60,19 +61,23 @@ public class ServerControllerImpl implements ServerController {
 	}
 
 	public void addPhone(Phone phone) {
-		if (phone.getSubscriber() != null)
-		 	model.getSubscriber(phone.getSubscriber()).getPhoneList().add(phone.getId());
+		/*if (phone.getSubscriber() != null)
+			model.getSubscriber(phone.getSubscriber()).getPhoneList()
+					.add(phone.getId());*/
 		model.addPhone(phone);
 		notificationController.phoneAdded(phone);
 	}
 
 	public void replacePhone(Phone phone, Long oldSubscriber) {
-		if (oldSubscriber != null)
-			model.getSubscriber(oldSubscriber).removePhoneById(phone.getId());
-		if (phone.getSubscriber() != null)
+		/*if (oldSubscriber != null) {
+			Subscriber newSub = model.getSubscriber(oldSubscriber);
+			//newSub.removePhoneById(phone.getId());
+			model.changeSubscriber(newSub);
+		}*/
+		/*if (phone.getSubscriber() != null)
 			model.getPhonesBySubscriber(phone.getSubscriber()).add(
-					phone.getId());
-		model.addPhone(phone);
+					phone.getId());*/
+		model.changePhone(phone);
 		notificationController.phoneChanged(phone);
 	}
 
@@ -82,10 +87,11 @@ public class ServerControllerImpl implements ServerController {
 
 	public void deletePhone(Long phoneId) {
 		// unlockPhone(phoneId);
-		Subscriber subsc = model.getSubscriber(model.getPhone(phoneId).getSubscriber());
-		if (subsc != null) {
+		Subscriber subsc = model.getSubscriber(model.getPhone(phoneId)
+				.getSubscriber());
+		/*if (subsc != null) {
 			subsc.removePhoneById(phoneId);
-		}
+		}*/
 		Phone phone = model.getPhone(phoneId);
 		model.removePhone(phoneId);
 		notificationController.phoneRemoved(phone);
@@ -125,6 +131,5 @@ public class ServerControllerImpl implements ServerController {
 	public void unlockPhone(Long id) {
 		model.unlockPhone(id);
 	}
-
 
 }

@@ -67,8 +67,10 @@ public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 		phoneNumber.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!modelController.tryLockPhone(((Phone) phoneNumber
-						.getSelectedItem()).getId())) {
+
+				if (phoneNumber.getSelectedItem() != null
+						&& !modelController.tryLockPhone(((Phone) phoneNumber
+								.getSelectedItem()).getId())) {
 					JOptionPane
 							.showMessageDialog(null,
 									"Phone is currently locked by another user all fiels will be uneditable");
@@ -80,6 +82,7 @@ public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 					setAllEditable(true);
 					updateFields();
 				}
+
 			}
 		});
 		JLabel id = new JLabel("Phone Number");
@@ -107,9 +110,9 @@ public class UpdatePhone extends JPanel implements PhonePanel, SubscriberPanel {
 						} else {
 							p.setHours(new Double(hoursT.getText()));
 						}
-
-						p.setSubscriber(((Subscriber) subscriberT
-								.getSelectedItem()).getId());
+						if (subscriberT.getSelectedItem() != null)
+							p.setSubscriber(((Subscriber) subscriberT
+									.getSelectedItem()).getId());
 						modelController.replacePhone(p,
 								chosenPhone.getSubscriber());
 
