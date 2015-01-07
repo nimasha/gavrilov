@@ -39,8 +39,7 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 		JLabel subscriber = new JLabel("Subscriber");
 		List<Subscriber> list = modelController.getSubscribers();
 		if (list != null) {
-			subscriberT = new JComboBox<>(list
-					.toArray());
+			subscriberT = new JComboBox<>(list.toArray());
 			subscriberT.setSelectedIndex(-1);
 		} else
 			subscriberT = new JComboBox<>();
@@ -77,27 +76,35 @@ public class CreatePhone extends JPanel implements SubscriberPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String balanceText = balanceT.getText();
 				if (!idT.getText().isEmpty()) {
-					if (ValidatorImpl.getInstance()
-							.validateBalance(balanceText)) {
-						Double balance;
-						if (balanceText.isEmpty()) {
-							balance = 0.0;
+					if (modelController.getPhone(new Long(idT.getText())) == null) {
+						if (ValidatorImpl.getInstance().validateBalance(
+								balanceText)) {
+							Double balance;
+							if (balanceText.isEmpty()) {
+								balance = 0.0;
+							} else {
+								balance = new Double(balanceText);
+							}
+
+							Phone p = new Phone(new Long(idT.getText()),
+									balance,
+									subscriberT.getSelectedItem() != null
+											? ((Subscriber) subscriberT
+													.getSelectedItem()).getId()
+											: null);
+							modelController.addPhone(p);
+
+							info.setText("Pone with number " + idT.getText()
+									+ "  was successfully created");
+
 						} else {
-							balance = new Double(balanceText);
+							JOptionPane.showMessageDialog(null,
+									Constants.BALANCE_ERROR_MESSAGE);
 						}
 
-						Phone p = new Phone(new Long(idT.getText()), balance,
-								subscriberT.getSelectedItem() != null
-										? ((Subscriber) subscriberT
-												.getSelectedItem()).getId()
-										: null);
-						modelController.addPhone(p);
-
-						info.setText("Pone with number " + idT.getText()
-								+ "  was successfully created");
 					} else {
 						JOptionPane.showMessageDialog(null,
-								Constants.BALANCE_ERROR_MESSAGE);
+								"Phone " + idT.getText() + " alredy exists");
 					}
 				} else {
 					info.setText("Please input at least the ID");

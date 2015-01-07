@@ -54,6 +54,7 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 							.showMessageDialog(null,
 									"Subscriber is currently locked by another user all fields will be uneditable");
 					setAllEditable(false);
+					updateFields();
 				} else {
 					setAllEditable(true);
 					lockUnlockSubscriber();
@@ -70,14 +71,14 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 				if (chosenSubscrier != null) {
 					if (validator.validateFIO(fioT.getText())) {
 						if (validator.validateDate(birthdayT.getText())) {
-							if (validator.validateDate(passportT.getText())) {
+							if (validator.validatePassport(passportT.getText())) {
 								Subscriber s = new Subscriber();
 								s.setId(chosenSubscrier.getId());
 								s.setBirthday(birthdayT.getText());
 								s.setPassport(passportT.getText());
 								s.setFio(fioT.getText());
 								s.setAddress(addressT.getText());
-
+								modelController.replaceSubscriber(s);
 								Phone p;
 								for (String phone : phoneNumber.getText()
 										.split(",")) {
@@ -95,7 +96,7 @@ public class UpdateSubscriber extends JPanel implements SubscriberPanel {
 										}
 									}
 								}
-								modelController.replaceSubscriber(s);
+								
 								subscriberT.removeAllItems();
 								subscriberT
 										.setModel(new DefaultComboBoxModel<Object>(

@@ -55,24 +55,33 @@ public class CreateSubscriber extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if (validator.validateFIO(fioT.getText())) {
 					if (validator.validateDate(birthdayT.getText())) {
-						if (validator.validateDate(pasT.getText())) {
+						if (validator.validatePassport(pasT.getText())) {
 							Subscriber s = new Subscriber(new Random()
 									.nextLong(), pasT.getText(),
 									fioT.getText(), addressT.getText(),
 									birthdayT.getText());
-							//List<Long> list = new ArrayList<>();
+							modelController.addSubscriber(s);
+							// List<Long> list = new ArrayList<>();
 							Phone p;
 							if (!phones.getText().isEmpty()) {
 								for (String phone : phones.getText().split(",")) {
-									p = new Phone();
-									p.setId(new Long(phone));
-									p.setSubscriber(s.getId());
-									modelController.addPhone(p);
-									//list.add(p.getId());
+									if (!phone.isEmpty()) {
+										p = modelController.getPhone(new Long(
+												phone));
+										if (p == null) {
+											p = new Phone(new Long(phone));
+											p.setSubscriber(s.getId());
+											modelController.addPhone(p);
+										} else {
+											p.setSubscriber(s.getId());
+											modelController.replacePhone(p,
+													null);
+										}
+									}
 								}
-								/*s.setPhoneList(list);*/
+								/* s.setPhoneList(list); */
 							}
-							modelController.addSubscriber(s);
+
 							info.setText("Subscriber " + fioT.getText()
 									+ " was successfully created");
 						} else {
